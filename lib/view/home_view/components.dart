@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:taskaia/controller/controllers/home_controller.dart';
-
 import '../../controller/controllers/theme_controller.dart';
 import '../../utils/theme/colors.dart';
 import '../app_components.dart';
@@ -69,6 +68,8 @@ class BuildHomeAppBar extends StatelessWidget {
           Tab(text: 'Memories'),
         ],
         onTap: (int currentIndex) => _homeController.onTabChanged(currentIndex),
+        isScrollable: false,
+        physics: const NeverScrollableScrollPhysics(),
       ),
     );
   }
@@ -83,6 +84,7 @@ class BuildHomeBody extends StatelessWidget {
       child: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: const TabBarView(
+          physics:  NeverScrollableScrollPhysics(),
           children: [
             NotesTabView(),
             TasksTabView(),

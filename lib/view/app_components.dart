@@ -114,6 +114,35 @@ class ElevatedButtonUtil extends StatelessWidget {
   }
 }
 
+class FloatingActionButtonUtil extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback onClick;
+
+  const FloatingActionButtonUtil(
+      {Key? key, required this.icon, required this.onClick})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      child: Icon(
+        icon,
+        color: whiteClr,
+        size: 32.sp,
+      ),
+      backgroundColor: context.theme.appBarTheme.backgroundColor,
+      shape: OutlineInputBorder(
+        borderRadius: const BorderRadius.all(Radius.circular(15.0)),
+        borderSide: BorderSide(
+          color: Colors.grey.shade300,
+          width: 2,
+        ),
+      ),
+      onPressed: onClick,
+    );
+  }
+}
+
 class TextUtil extends StatelessWidget {
   final String text;
   final double fontSize;
@@ -233,7 +262,7 @@ class TextFieldUtil extends StatelessWidget {
   }
 
   OutlineInputBorder _border() => OutlineInputBorder(
-        borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+        borderRadius: const BorderRadius.all(Radius.circular(8.0)),
         borderSide: BorderSide(
           color: Get.isDarkMode ? Colors.grey.shade300 : blackClr,
           width: 1.5,
@@ -300,3 +329,93 @@ AppBar appBarUtil(
       actions: actions,
       automaticallyImplyLeading: autoLeading ?? false,
     );
+
+class BuildColorPickerUtil extends StatelessWidget {
+  final String buttonTitle;
+  final VoidCallback onPickColor, onClick;
+
+  const BuildColorPickerUtil({
+    Key? key,
+    required this.buttonTitle,
+    required this.onPickColor,
+    required this.onClick,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 80.0,
+      width: infinityWidth,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextUtil(
+                    text: 'Color',
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Get.isDarkMode ? whiteClr : blackClr,
+                  ),
+                  verticalSpace1(),
+                  SizedBox(
+                    height: 30.0,
+                    width: infinityWidth,
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: 3,
+                      itemBuilder: (_, index) {
+                        List<Color> _colors = [blueClr, pinkClr, orangeClr];
+                        return InkWell(
+                          highlightColor: _colors[index].withOpacity(0.5),
+                          splashColor: _colors[index].withOpacity(0.5),
+                          hoverColor: _colors[index].withOpacity(0.5),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(5.0)),
+                          child: Container(
+                            height: 30.0,
+                            width: 30.0,
+                            decoration: BoxDecoration(
+                              color: _colors[index],
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Center(
+                              child: Icon(
+                                Icons.check,
+                                color: whiteClr,
+                              ),
+                            ),
+                          ),
+                          onTap: onPickColor,
+                        );
+                      },
+                      separatorBuilder: (_, index) => const SizedBox(
+                        width: 12.0,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            horizontalSpace2(),
+            ElevatedButtonUtil(
+              child: TextUtil(
+                text: buttonTitle,
+                fontSize: 18.sp,
+                fontWeight: FontWeight.bold,
+                color: whiteClr,
+              ),
+              radius: 8.0,
+              onClick: onClick,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
