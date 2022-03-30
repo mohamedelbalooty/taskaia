@@ -23,6 +23,8 @@ dependencies:
   date_picker_timeline: ^1.2.3
   flutter_staggered_animations: ^1.0.0
   google_fonts: ^2.3.1
+  flutter_screenutil: ^5.3.1
+  flutter_svg: ^1.0.3
 
 dev_dependencies:
   flutter_test:

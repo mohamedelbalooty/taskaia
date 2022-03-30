@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'controller/controllers/theme_controller.dart';
+import 'utils/get_service/get_service.dart';
+import 'utils/localization/localization.dart';
 import 'utils/routes/routes.dart';
+import 'utils/theme/theme.dart';
 
-void main(){
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initializationService();
   runApp(const TaskaiaApp());
+}
+
+Future initializationService() async {
+  await Get.putAsync(() => GetService().init());
 }
 
 class TaskaiaApp extends StatelessWidget {
@@ -11,11 +22,29 @@ class TaskaiaApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Taskaia App',
-      initialRoute: Routes.initialRoute,
-      getPages: Routes.pageRoutes,
+    return ScreenUtilInit(
+      designSize: const Size(360, 640),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: () => GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Taskaia App',
+        initialRoute: Routes.initialRoute,
+        getPages: Routes.pageRoutes,
+        locale: const Locale('en'),
+        fallbackLocale: Get.deviceLocale,
+        translations: AppLocalization(),
+        builder: (context, widget) {
+          ScreenUtil.setContext(context);
+          return MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+            child: widget!,
+          );
+        },
+        theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        themeMode: ThemeController().themeMode,
+      ),
     );
   }
 }
