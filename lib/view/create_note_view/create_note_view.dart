@@ -14,7 +14,6 @@ class _CreateNoteViewState extends State<CreateNoteView> {
 
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

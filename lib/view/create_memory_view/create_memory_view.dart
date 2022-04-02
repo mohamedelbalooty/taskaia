@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import '../../utils/theme/colors.dart';
 import '../app_components.dart';
 import '../create_task_view/components.dart';
 
@@ -15,7 +17,6 @@ class _CreateMemoryViewState extends State<CreateMemoryView> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _memoryController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,8 +49,12 @@ class _CreateMemoryViewState extends State<CreateMemoryView> {
                 title: 'Date',
                 controller: _dateController,
                 hint: 'Enter task here',
-                icon: Icons.date_range,
-                enabled: false,
+                icon: Icon(
+                  Icons.date_range,
+                  color: Get.isDarkMode ? Colors.grey.shade300 : blackClr,
+                  size: 24.sp,
+                ),
+                readOnly: false,
                 isSuffix: true,
               ),
               verticalSpace2(),

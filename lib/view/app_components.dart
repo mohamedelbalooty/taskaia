@@ -143,6 +143,103 @@ class FloatingActionButtonUtil extends StatelessWidget {
   }
 }
 
+class DropdownMenuButtonUtil extends StatelessWidget {
+  final List<String> items;
+  final String value;
+  final IconData icon;
+  final Function(String?) onChanged;
+
+  const DropdownMenuButtonUtil(
+      {Key? key,
+      required this.items,
+      required this.value,
+      required this.icon,
+      required this.onChanged})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton<String>(
+      value: value,
+      onChanged: onChanged,
+      items: items
+          .map(
+            (element) => DropdownMenuItem(
+              value: element,
+              child: TextUtil(
+                text: element,
+                color: Colors.red,
+                fontSize: 14.sp,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          )
+          .toList(),
+      icon: Icon(
+        icon,
+        color: Get.isDarkMode ? Colors.grey.shade300 : blackClr,
+        size: 24.sp,
+      ),
+      underline: const SizedBox(),
+    );
+  }
+}
+
+class BuildPopUpMenuButtonUtil extends StatelessWidget {
+  final List<String> entries;
+  final Widget icon;
+  final Function(String) onSelected;
+  final EdgeInsetsGeometry padding;
+
+  const BuildPopUpMenuButtonUtil({
+    Key? key,
+    required this.entries,
+    required this.icon,
+    required this.onSelected,
+    this.padding = const EdgeInsets.all(8.0),
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    List<PopupMenuEntry<String>> popEntry = [];
+    return PopupMenuButton<String>(
+      padding: padding,
+      shape: const OutlineInputBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(10.0),
+        ),
+        borderSide: BorderSide(color: transparent),
+      ),
+      itemBuilder: (BuildContext context) {
+        popEntry.clear();
+        for (int i = 0; i < entries.length; i++) {
+          popEntry.add(
+            PopupMenuItem<String>(
+              value: entries[i],
+              child: Text(entries[i]),
+              textStyle: Get.deviceLocale!.languageCode == 'en'
+                  ? GoogleFonts.lato(
+                      textStyle: const TextStyle(
+                        color: whiteClr,
+                      ),
+                    )
+                  : GoogleFonts.cairo(
+                      textStyle: const TextStyle(
+                        color: whiteClr,
+                      ),
+                    ),
+            ),
+          );
+        }
+        return popEntry;
+      },
+      onSelected: onSelected,
+      icon: icon,
+      color: context.theme.appBarTheme.backgroundColor,
+    );
+  }
+}
+
 class TextUtil extends StatelessWidget {
   final String text;
   final double fontSize;
@@ -204,21 +301,20 @@ class TextUtil extends StatelessWidget {
 class TextFieldUtil extends StatelessWidget {
   final TextEditingController controller;
   final String hint;
-  final IconData? icon;
-  final VoidCallback? onTap;
+  final Widget? icon;
+  // final String? Function(String?) validate;
   final int maxLines;
   final double height;
-  final bool enabled, isSuffix;
+  final bool readOnly, isSuffix;
 
   const TextFieldUtil({
     Key? key,
     required this.controller,
     required this.hint,
     this.icon,
-    this.onTap,
     this.maxLines = 1,
-    this.height = 12.0,
-    this.enabled = true,
+    this.height = 16.0,
+    this.readOnly = false,
     this.isSuffix = false,
   }) : super(key: key);
 
@@ -226,31 +322,24 @@ class TextFieldUtil extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
-      onTap: onTap,
       style: TextStyle(
         color: Get.isDarkMode ? Colors.grey.shade300 : blackClr,
         fontSize: 16.sp,
         fontWeight: FontWeight.w400,
       ),
       maxLines: maxLines,
-      cursorColor: Theme.of(context).appBarTheme.backgroundColor,
+      readOnly: readOnly,
+      cursorColor: Get.isDarkMode ? whiteClr : lightHeaderClr,
       decoration: InputDecoration(
         contentPadding:
             EdgeInsets.symmetric(horizontal: 10.0, vertical: height),
-        enabled: enabled,
         hintText: hint,
         hintStyle: TextStyle(
           color: Get.isDarkMode ? Colors.grey.shade300 : blackClr,
           fontSize: 16.sp,
           fontWeight: FontWeight.w400,
         ),
-        suffixIcon: isSuffix
-            ? Icon(
-                icon,
-                color: Get.isDarkMode ? Colors.grey.shade300 : blackClr,
-                size: 24.sp,
-              )
-            : const SizedBox(),
+        suffixIcon: isSuffix ? icon : const SizedBox(),
         border: _border(),
         disabledBorder: _border(),
         enabledBorder: _border(),
@@ -302,7 +391,7 @@ class DividerUtil extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: height ?? 0),
+      padding: EdgeInsets.symmetric(vertical: height ?? 0.0),
       child: Divider(
         color: color,
         thickness: thickness,
@@ -333,85 +422,96 @@ AppBar appBarUtil(
 class BuildColorPickerUtil extends StatelessWidget {
   final String buttonTitle;
   final VoidCallback onPickColor, onClick;
-
+  // final bool isCreated;
   const BuildColorPickerUtil({
     Key? key,
     required this.buttonTitle,
     required this.onPickColor,
     required this.onClick,
+    // required this.isCreated
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 80.0,
+      height: 83.5,
       width: infinityWidth,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
+        child: Column(
           children: [
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TextUtil(
-                    text: 'Color',
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.bold,
-                    color: Get.isDarkMode ? whiteClr : blackClr,
-                  ),
-                  verticalSpace1(),
-                  SizedBox(
-                    height: 30.0,
-                    width: infinityWidth,
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 3,
-                      itemBuilder: (_, index) {
-                        List<Color> _colors = [blueClr, pinkClr, orangeClr];
-                        return InkWell(
-                          highlightColor: _colors[index].withOpacity(0.5),
-                          splashColor: _colors[index].withOpacity(0.5),
-                          hoverColor: _colors[index].withOpacity(0.5),
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(5.0)),
-                          child: Container(
-                            height: 30.0,
-                            width: 30.0,
-                            decoration: BoxDecoration(
-                              color: _colors[index],
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Center(
-                              child: Icon(
-                                Icons.check,
-                                color: whiteClr,
-                              ),
-                            ),
-                          ),
-                          onTap: onPickColor,
-                        );
-                      },
-                      separatorBuilder: (_, index) => const SizedBox(
-                        width: 12.0,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+            Divider(
+              color: Get.isDarkMode ? Colors.grey.shade300 : blackClr,
+              thickness: 1.5,
+              height: 0,
             ),
-            horizontalSpace2(),
-            ElevatedButtonUtil(
-              child: TextUtil(
-                text: buttonTitle,
-                fontSize: 18.sp,
-                fontWeight: FontWeight.bold,
-                color: whiteClr,
-              ),
-              radius: 8.0,
-              onClick: onClick,
+            const SizedBox(height: 2),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextUtil(
+                        text: 'Color',
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.bold,
+                        color: Get.isDarkMode ? whiteClr : blackClr,
+                      ),
+                      verticalSpace1(),
+                      SizedBox(
+                        height: 30.0,
+                        width: infinityWidth,
+                        child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 3,
+                          itemBuilder: (_, index) {
+                            List<Color> _colors = [blueClr, pinkClr, orangeClr];
+                            return InkWell(
+                              highlightColor: _colors[index].withOpacity(0.5),
+                              splashColor: _colors[index].withOpacity(0.5),
+                              hoverColor: _colors[index].withOpacity(0.5),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(5.0)),
+                              child: Container(
+                                height: 30.0,
+                                width: 30.0,
+                                decoration: BoxDecoration(
+                                  color: _colors[index],
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Center(
+                                  child: Icon(
+                                    Icons.check,
+                                    color: whiteClr,
+                                  ),
+                                ),
+                              ),
+                              onTap: onPickColor,
+                            );
+                          },
+                          separatorBuilder: (_, index) => const SizedBox(
+                            width: 12.0,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                horizontalSpace2(),
+                ElevatedButtonUtil(
+                  child: TextUtil(
+                    text: buttonTitle,
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
+                    color: whiteClr,
+                  ),
+                  radius: 8.0,
+                  onClick: onClick,
+                ),
+              ],
             ),
           ],
         ),

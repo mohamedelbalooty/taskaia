@@ -8,11 +8,9 @@ class BuildTaskItemWidget extends StatelessWidget {
   final String title;
   final TextEditingController controller;
   final String hint;
-  final IconData? icon;
-  final VoidCallback? onTap;
+  final Widget? icon;
   final int maxLines;
-  final double height;
-  final bool enabled, isSuffix;
+  final bool readOnly, isSuffix;
 
   const BuildTaskItemWidget({
     Key? key,
@@ -20,10 +18,8 @@ class BuildTaskItemWidget extends StatelessWidget {
     required this.controller,
     required this.hint,
     this.icon,
-    this.onTap,
     this.maxLines = 1,
-    this.height = 12.0,
-    this.enabled = true,
+    this.readOnly = false,
     this.isSuffix = false,
   }) : super(key: key);
 
@@ -43,10 +39,8 @@ class BuildTaskItemWidget extends StatelessWidget {
           controller: controller,
           hint: hint,
           icon: icon,
-          onTap: onTap,
-          height: height,
           maxLines: maxLines,
-          enabled: enabled,
+          readOnly: readOnly,
           isSuffix: isSuffix,
         ),
       ],
