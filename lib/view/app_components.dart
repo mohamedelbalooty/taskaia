@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../utils/theme/colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+import '../utils/helper/size_configuration_helper.dart';
 
 double infinityHeight = double.infinity;
 double infinityWidth = double.infinity;
@@ -34,18 +37,18 @@ EdgeInsets padding2() => const EdgeInsets.all(10);
 
 EdgeInsets padding3() => const EdgeInsets.all(20);
 
-EdgeInsets symmetricVerticalPadding1() => EdgeInsets.symmetric(vertical: 10.h);
+EdgeInsets symmetricVerticalPadding1() => const EdgeInsets.symmetric(vertical: 10);
 
-EdgeInsets symmetricVerticalPadding2() => EdgeInsets.symmetric(vertical: 15.h);
+EdgeInsets symmetricVerticalPadding2() => const EdgeInsets.symmetric(vertical: 15);
 
 EdgeInsets symmetricHorizontalPadding1() =>
-    EdgeInsets.symmetric(horizontal: 10.w);
+    const EdgeInsets.symmetric(horizontal: 10);
 
 EdgeInsets symmetricHorizontalPadding2() =>
-    EdgeInsets.symmetric(horizontal: 15.w);
+    const EdgeInsets.symmetric(horizontal: 15);
 
 EdgeInsets symmetricHorizontalPadding3() =>
-    EdgeInsets.symmetric(horizontal: 20.w);
+    const EdgeInsets.symmetric(horizontal: 20);
 
 ///BUTTONS
 
@@ -385,7 +388,7 @@ class DividerUtil extends StatelessWidget {
   final Color? color;
   final double? thickness, height;
 
-  const DividerUtil({Key? key, this.color, this.height, this.thickness})
+  const DividerUtil({Key? key, this.color, this.height, this.thickness = 1.0})
       : super(key: key);
 
   @override
@@ -434,10 +437,12 @@ class BuildColorPickerUtil extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 83.5,
+      height: (SizeConfigurationHelper.screenOrientation == Orientation.portrait) ?
+      SizeConfigurationHelper.screenHeight > 640.0 ? 87.0 : 75.0 :
+      91.0,
       width: infinityWidth,
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.0),
+        padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 5.0, bottom: 10.0),
         child: Column(
           children: [
             Divider(
@@ -445,7 +450,7 @@ class BuildColorPickerUtil extends StatelessWidget {
               thickness: 1.5,
               height: 0,
             ),
-            const SizedBox(height: 2),
+            const SizedBox(height: 2.0),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -460,9 +465,9 @@ class BuildColorPickerUtil extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                         color: Get.isDarkMode ? whiteClr : blackClr,
                       ),
-                      verticalSpace1(),
+                      const SizedBox(height: 5.0),
                       SizedBox(
-                        height: 30.0,
+                        height: 28.0,
                         width: infinityWidth,
                         child: ListView.separated(
                           scrollDirection: Axis.horizontal,
@@ -476,8 +481,8 @@ class BuildColorPickerUtil extends StatelessWidget {
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(5.0)),
                               child: Container(
-                                height: 30.0,
-                                width: 30.0,
+                                height: 28.0,
+                                width: 28.0,
                                 decoration: BoxDecoration(
                                   color: _colors[index],
                                   shape: BoxShape.circle,
@@ -516,6 +521,64 @@ class BuildColorPickerUtil extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class ResponsiveListUtil extends StatelessWidget {
+  final Widget child;
+  final int itemCount;
+  final bool shrinkWrap;
+  final ScrollPhysics physics;
+
+  const ResponsiveListUtil({
+    Key? key,
+    required this.child,
+    required this.itemCount,
+    this.shrinkWrap = false,
+    this.physics = const BouncingScrollPhysics(),
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (_, constraints) {
+        if (SizeConfigurationHelper.screenOrientation == Orientation.portrait) {
+          return ListView.separated(
+            shrinkWrap: shrinkWrap,
+            physics: physics,
+            itemCount: itemCount,
+            itemBuilder: (_, index) => AnimationConfiguration.staggeredList(
+              position: index,
+              duration: const Duration(milliseconds: 1300),
+              child: SlideAnimation(
+                horizontalOffset: 300,
+                child: FadeInAnimation(child: child),
+              ),
+            ),
+            separatorBuilder: (_, index) => verticalSpace2(),
+          );
+        }
+        return GridView.builder(
+          shrinkWrap: shrinkWrap,
+          physics: physics,
+          itemCount: itemCount,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 10.h,
+              crossAxisSpacing: 10.w,
+              childAspectRatio: 1.3
+          ),
+          itemBuilder: (_, index) => AnimationConfiguration.staggeredList(
+            position: index,
+            duration: const Duration(milliseconds: 1375),
+            child: SlideAnimation(
+              horizontalOffset: 300,
+              child: FadeInAnimation(child: child),
+            ),
+          ),
+        );
+      },
     );
   }
 }

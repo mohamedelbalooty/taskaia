@@ -6,6 +6,7 @@ import 'utils/get_service/get_service.dart';
 import 'utils/localization/localization.dart';
 import 'utils/routes/routes.dart';
 import 'utils/theme/theme.dart';
+import 'utils/helper/size_configuration_helper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +20,13 @@ Future initializationService() async {
 
 class TaskaiaApp extends StatelessWidget {
   const TaskaiaApp({Key? key}) : super(key: key);
-
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+  //     SizeConfiguration.initSizeConfiguration(context);
+  //   });
+  // }
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
