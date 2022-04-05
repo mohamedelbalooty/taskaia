@@ -18,8 +18,12 @@ class HomeView extends StatelessWidget {
       initialIndex: 0,
       child: Scaffold(
         backgroundColor: context.theme.scaffoldBackgroundColor,
-        appBar: buildHomeAppBar(),
-        body: const BuildHomeBody(),
+        body: NestedScrollView(
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            return [const BuildHomeAppBar()];
+          },
+          body: const BuildHomeBody(),
+        ),
         floatingActionButton: FloatingActionButtonUtil(
           icon: Icons.add,
           onClick: () {

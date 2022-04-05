@@ -1,6 +1,6 @@
 class Task {
   final int id;
-  String? title, task, repeat, date, startTime, endTime;
+  String? title, task, repeat, dateTime, startTime, endTime;
   int? color, remind;
 
   Task(
@@ -8,7 +8,7 @@ class Task {
       this.title,
       this.task,
       this.repeat,
-      this.date,
+      this.dateTime,
       this.startTime,
       this.endTime,
       this.color,
@@ -20,7 +20,7 @@ class Task {
       title: json['title'],
       task: json['task'],
       repeat: json['repeat'],
-      date: json['date'],
+      dateTime: json['date'],
       startTime: json['startTime'],
       endTime: json['endTime'],
       color: json['color'],
@@ -34,7 +34,7 @@ class Task {
       'title': title,
       'task': task,
       'repeat': repeat,
-      'date': date,
+      'date': dateTime,
       'startTime': startTime,
       'endTime': endTime,
       'color': color,

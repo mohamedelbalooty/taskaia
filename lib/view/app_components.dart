@@ -85,7 +85,7 @@ class IconButtonUtil extends StatelessWidget {
 
 class ElevatedButtonUtil extends StatelessWidget {
   final Widget child;
-  final Function() onClick;
+  final VoidCallback onClick;
   final Color color;
   final Size size;
   final double radius;
@@ -528,6 +528,7 @@ class BuildColorPickerUtil extends StatelessWidget {
 class ResponsiveListUtil extends StatelessWidget {
   final Widget child;
   final int itemCount;
+  final EdgeInsetsGeometry padding;
   final bool shrinkWrap;
   final ScrollPhysics physics;
 
@@ -535,6 +536,7 @@ class ResponsiveListUtil extends StatelessWidget {
     Key? key,
     required this.child,
     required this.itemCount,
+    this.padding = EdgeInsets.zero,
     this.shrinkWrap = false,
     this.physics = const BouncingScrollPhysics(),
   }) : super(key: key);
@@ -545,6 +547,7 @@ class ResponsiveListUtil extends StatelessWidget {
       builder: (_, constraints) {
         if (SizeConfigurationHelper.screenOrientation == Orientation.portrait) {
           return ListView.separated(
+            padding: padding,
             shrinkWrap: shrinkWrap,
             physics: physics,
             itemCount: itemCount,
@@ -560,6 +563,7 @@ class ResponsiveListUtil extends StatelessWidget {
           );
         }
         return GridView.builder(
+          padding: padding,
           shrinkWrap: shrinkWrap,
           physics: physics,
           itemCount: itemCount,
@@ -569,7 +573,8 @@ class ResponsiveListUtil extends StatelessWidget {
               crossAxisSpacing: 10.w,
               childAspectRatio: 1.3
           ),
-          itemBuilder: (_, index) => AnimationConfiguration.staggeredList(
+          itemBuilder: (_, index) => AnimationConfiguration.staggeredGrid(
+            columnCount: 2,
             position: index,
             duration: const Duration(milliseconds: 1375),
             child: SlideAnimation(
@@ -579,6 +584,22 @@ class ResponsiveListUtil extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class EmptyWidgetUtil extends StatelessWidget {
+  final String image;
+  const EmptyWidgetUtil({Key? key, required this.image}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: SvgImageUtil(
+        image: image,
+        height: 200.h,
+        width: 200.w,
+      ),
     );
   }
 }

@@ -11,11 +11,13 @@ class TasksTabView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // return EmptyWidgetUtil(image: 'assets/images/tasks.svg');
     return Material(
       color: context.theme.scaffoldBackgroundColor,
       child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         child: Padding(
-          padding: symmetricHorizontalPadding2(),
+          padding: symmetricHorizontalPadding1(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

@@ -6,7 +6,6 @@ const Color orangeClr = Color(0xFFEF6B39);
 const Color whiteClr = Colors.white;
 const Color blackClr = Color(0xFF2F2E41);
 const Color greyClr = Colors.grey;
-// const Color blackClr = Colors.black87;
 const Color transparent = Colors.transparent;
 const Color lightHeaderClr = Color(0xFF1D3DB9);
 Color lightBodyClr = Colors.white;
