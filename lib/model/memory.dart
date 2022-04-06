@@ -1,28 +1,37 @@
-class Memory {
-  final int id;
-  final String title, memory, dateTime;
+import 'database_model.dart';
 
-  Memory({
-    required this.id,
-    required this.title,
-    required this.memory,
-    required this.dateTime,
-  });
+class Memory extends DatabaseModel {
+  Memory(
+      {int? id,
+      required String title,
+      required String content,
+      required String dateTime,
+      required int color})
+      : super(
+            id: id,
+            title: title,
+            content: content,
+            dateTime: dateTime,
+            color: color);
 
-  factory Memory.fromJson(Map<String, dynamic> json){
+  factory Memory.fromJson(Map<String, dynamic> json) {
     return Memory(
       id: json['id'],
       title: json['title'],
-      memory: json['memory'],
+      content: json['content'],
       dateTime: json['dateTime'],
+      color: json['color'],
     );
   }
-  Map<String, dynamic> toJson(){
+
+  @override
+  Map<String, dynamic> toJson() {
     return {
       'id': id,
       'title': title,
-      'memory': memory,
-      'dateTime': dateTime
+      'memory': content,
+      'dateTime': dateTime,
+      'color': color
     };
   }
 }

@@ -9,11 +9,10 @@ import '../../view/notification_view/notification_view.dart';
 class Routes {
   static const String initialRoute = RoutesPath.homeView;
 
-  // static const String initialRoute = RoutesPath.createTaskView;
   static List<GetPage> pageRoutes = [
     GetPage(
       name: RoutesPath.homeView,
-      page: () => HomeView(),
+      page: () => const HomeView(),
       bindings: [
         HomeBinding(),
       ],
@@ -24,15 +23,15 @@ class Routes {
     ),
     GetPage(
       name: RoutesPath.createNoteView,
-      page: () => const CreateNoteView(),
+      page: () =>  CreateNoteView(),
     ),
     GetPage(
       name: RoutesPath.createTaskView,
-      page: () => const CreateTaskView(),
+      page: () => CreateTaskView(),
     ),
     GetPage(
       name: RoutesPath.createMemoryView,
-      page: () => const CreateMemoryView(),
+      page: () =>  CreateMemoryView(),
     ),
   ];
 }
@@ -41,7 +40,6 @@ class RoutesPath {
   static const String homeView = '/homeView';
   static const String notificationView = '/notificationView';
   static const String createNoteView = '/createNoteView';
-static const String createTaskView = '/createTaskView';
-static const String createMemoryView = '/createMemoryView';
-
+  static const String createTaskView = '/createTaskView';
+  static const String createMemoryView = '/createMemoryView';
 }

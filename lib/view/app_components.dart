@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -301,20 +303,23 @@ class TextUtil extends StatelessWidget {
   }
 }
 
-class TextFieldUtil extends StatelessWidget {
+class TextFormFieldUtil extends StatelessWidget {
   final TextEditingController controller;
   final String hint;
   final Widget? icon;
-  // final String? Function(String?) validate;
+  final String? Function(String?) validate;
+  final VoidCallback? onTap;
   final int maxLines;
   final double height;
   final bool readOnly, isSuffix;
 
-  const TextFieldUtil({
+  const TextFormFieldUtil({
     Key? key,
     required this.controller,
     required this.hint,
+    required this.validate,
     this.icon,
+    this.onTap,
     this.maxLines = 1,
     this.height = 16.0,
     this.readOnly = false,
@@ -323,8 +328,10 @@ class TextFieldUtil extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       controller: controller,
+      onTap: onTap,
+      validator: validate,
       style: TextStyle(
         color: Get.isDarkMode ? Colors.grey.shade300 : blackClr,
         fontSize: 16.sp,
@@ -527,7 +534,7 @@ class BuildColorPickerUtil extends StatelessWidget {
 
 class ResponsiveListUtil extends StatelessWidget {
   final Widget child;
-  final int itemCount;
+  final int itemCount, columnCount;
   final EdgeInsetsGeometry padding;
   final bool shrinkWrap;
   final ScrollPhysics physics;
@@ -536,6 +543,7 @@ class ResponsiveListUtil extends StatelessWidget {
     Key? key,
     required this.child,
     required this.itemCount,
+    this.columnCount = 2,
     this.padding = EdgeInsets.zero,
     this.shrinkWrap = false,
     this.physics = const BouncingScrollPhysics(),
@@ -568,7 +576,7 @@ class ResponsiveListUtil extends StatelessWidget {
           physics: physics,
           itemCount: itemCount,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
+              crossAxisCount: columnCount,
               mainAxisSpacing: 10.h,
               crossAxisSpacing: 10.w,
               childAspectRatio: 1.3

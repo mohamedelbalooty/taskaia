@@ -1,22 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import '../../controller/controllers/memories_controller.dart';
 import '../../utils/theme/colors.dart';
 import '../app_components.dart';
 import '../create_task_view/components.dart';
 
-class CreateMemoryView extends StatefulWidget {
-  const CreateMemoryView({Key? key}) : super(key: key);
+class CreateMemoryView extends GetView<MemoriesController> {
+  CreateMemoryView({Key? key}) : super(key: key);
 
-  @override
-  State<CreateMemoryView> createState() => _CreateMemoryViewState();
-}
+  final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
 
-class _CreateMemoryViewState extends State<CreateMemoryView> {
-
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _memoryController = TextEditingController();
-  final TextEditingController _dateController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,53 +23,69 @@ class _CreateMemoryViewState extends State<CreateMemoryView> {
       body: SingleChildScrollView(
         child: Padding(
           padding: symmetricHorizontalPadding2(),
-          child: Column(
-            children: [
-              verticalSpace1(),
-              BuildTaskItemWidget(
-                title: 'Title',
-                controller: _titleController,
-                hint: 'Enter memory title here',
-              ),
-              verticalSpace2(),
-              BuildTaskItemWidget(
-                title: 'Note',
-                controller: _memoryController,
-                hint: 'Enter memory here',
-                maxLines: 3,
-              ),
-              verticalSpace2(),
-              BuildTaskItemWidget(
-                title: 'Date',
-                controller: _dateController,
-                hint: 'Enter task here',
-                icon: Icon(
-                  Icons.date_range,
-                  color: Get.isDarkMode ? Colors.grey.shade300 : blackClr,
-                  size: 24.sp,
+          child: Form(
+            key: _globalKey,
+            child: Column(
+              children: [
+                verticalSpace1(),
+                BuildTaskItemWidget(
+                  title: 'Title',
+                  controller: controller.titleController,
+                  hint: 'Enter memory title here',
+                  validate: (String? value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Enter memory title';
+                    }
+                    return null;
+                  },
                 ),
-                readOnly: false,
-                isSuffix: true,
-              ),
-              verticalSpace2(),
-            ],
+                verticalSpace2(),
+                BuildTaskItemWidget(
+                  title: 'Note',
+                  controller: controller.memoryController,
+                  hint: 'Enter memory here',
+                  maxLines: 3,
+                  validate: (String? value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Enter memory here';
+                    }
+                    return null;
+                  },
+                ),
+                verticalSpace2(),
+                BuildTaskItemWidget(
+                  title: 'Date',
+                  controller: controller.dateController,
+                  hint: 'Enter task here',
+                  icon: Icon(
+                    Icons.date_range,
+                    color: Get.isDarkMode ? Colors.grey.shade300 : blackClr,
+                    size: 24.sp,
+                  ),
+                  readOnly: false,
+                  isSuffix: true,
+                  validate: (String? value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Enter task here';
+                    }
+                    return null;
+                  },
+                ),
+                verticalSpace2(),
+              ],
+            ),
           ),
         ),
       ),
       bottomNavigationBar: BuildColorPickerUtil(
         buttonTitle: 'Create',
         onPickColor: () {},
-        onClick: () {},
+        onClick: () {
+          if (_globalKey.currentState!.validate()) {
+            print('No data');
+          }
+        },
       ),
     );
   }
-
-  @override
-  void dispose() {
-    _titleController.dispose();
-    _memoryController.dispose();
-    _dateController.dispose();
-    super.dispose();
-  }
 }
-

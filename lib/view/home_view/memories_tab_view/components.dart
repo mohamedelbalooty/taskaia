@@ -33,7 +33,7 @@ Step buildStepWidget({required Memory memory}) {
             color: pinkClr,
           ),
           child: TextUtil(
-            text: memory.memory,
+            text: memory.content,
             fontSize: 16.sp,
             color: whiteClr,
             fontWeight: FontWeight.w500,

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:taskaia/controller/controllers/home_controller.dart';
 import '../../controller/controllers/theme_controller.dart';
+import '../../utils/helper/notification_helper.dart';
 import '../../utils/theme/colors.dart';
 import '../app_components.dart';
 import 'memories_tab_view/memories_tab_view.dart';
@@ -30,10 +31,11 @@ class BuildHomeAppBar extends GetView<HomeController> {
         icon: Get.isDarkMode ? Icons.brightness_2 : Icons.brightness_2_outlined,
         color: whiteClr,
         iconSize: 26.sp,
-        onClick: () => ThemeController().changeThemeMode(),
-        // onClick: (){
-        //   NotificationHelper.displayNotification(title: 'title', body: 'body');
-        // },
+        // onClick: () => ThemeController().changeThemeMode(),
+        onClick: (){
+          NotificationHelper.displayNotification(title: 'title', body: 'body');
+          // NotificationHelper.scheduleNotification(title: 'title', body: 'body');
+        },
       ),
       actions: [
         Padding(

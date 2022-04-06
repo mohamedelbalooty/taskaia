@@ -2,13 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:taskaia/utils/routes/routes.dart';
 import '../../controller/controllers/home_controller.dart';
+import '../../utils/helper/notification_helper.dart';
 import '../app_components.dart';
 import '../../utils/helper/size_configuration_helper.dart';
 import 'components.dart';
 
-class HomeView extends StatelessWidget {
-  HomeView({Key? key}) : super(key: key);
+class HomeView extends StatefulWidget {
+  const HomeView({Key? key}) : super(key: key);
+
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
   final HomeController _homeController = Get.find<HomeController>();
+
+  @override
+  void initState() {
+    super.initState();
+    NotificationHelper.iosRequestPermission();
+  }
 
   @override
   Widget build(BuildContext context) {

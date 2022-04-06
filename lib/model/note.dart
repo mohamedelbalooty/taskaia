@@ -1,32 +1,38 @@
-class Note {
-  final int id, color;
-  final String note, dateTime;
-  String? image;
+import 'database_model.dart';
 
+class Note extends DatabaseModel {
+  // final String image;
   Note(
-      {required this.id,
-      required this.note,
-      required this.dateTime,
-      required this.color,
-      this.image});
+      {int? id,
+      required String title,
+      required String content,
+      required String dateTime,
+      required int color})
+      : super(
+            id: id,
+            title: title,
+            content: content,
+            dateTime: dateTime,
+            color: color);
 
   factory Note.fromJson(Map<String, dynamic> json) {
     return Note(
       id: json['id'],
-      note: json['note'],
+      title: json['title'],
+      content: json['content'],
       dateTime: json['dateTime'],
       color: json['color'],
-      image: json['image'],
     );
   }
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'note': note,
+      'title': title,
+      'content': content,
       'dateTime': dateTime,
       'color': color,
-      'image': image,
     };
   }
 }

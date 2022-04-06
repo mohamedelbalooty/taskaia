@@ -9,6 +9,8 @@ class BuildTaskItemWidget extends StatelessWidget {
   final TextEditingController controller;
   final String hint;
   final Widget? icon;
+  final String? Function(String?) validate;
+  final VoidCallback? onTap;
   final int maxLines;
   final bool readOnly, isSuffix;
 
@@ -17,6 +19,8 @@ class BuildTaskItemWidget extends StatelessWidget {
     required this.title,
     required this.controller,
     required this.hint,
+    required this.validate,
+    this.onTap,
     this.icon,
     this.maxLines = 1,
     this.readOnly = false,
@@ -35,8 +39,10 @@ class BuildTaskItemWidget extends StatelessWidget {
           color: Get.isDarkMode ? whiteClr : blackClr,
         ),
         verticalSpace1(),
-        TextFieldUtil(
+        TextFormFieldUtil(
           controller: controller,
+          validate: validate,
+          onTap: onTap,
           hint: hint,
           icon: icon,
           maxLines: maxLines,
