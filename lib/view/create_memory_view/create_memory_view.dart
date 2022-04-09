@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:taskaia/model/memory.dart';
+import '../../controller/controllers/create_memory_controller.dart';
 import '../../controller/controllers/memories_controller.dart';
 import '../../utils/theme/colors.dart';
 import '../app_components.dart';
 import '../create_task_view/components.dart';
 
-class CreateMemoryView extends GetView<MemoriesController> {
+class CreateMemoryView extends GetView<CreateMemoryController> {
   CreateMemoryView({Key? key}) : super(key: key);
 
+  final MemoriesController _controller = Get.find<MemoriesController>();
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
 
   @override
@@ -57,16 +60,22 @@ class CreateMemoryView extends GetView<MemoriesController> {
                   title: 'Date',
                   controller: controller.dateController,
                   hint: 'Enter task here',
-                  icon: Icon(
-                    Icons.date_range,
+                  icon: IconButtonUtil(
+                    icon: Icons.date_range,
                     color: Get.isDarkMode ? Colors.grey.shade300 : blackClr,
-                    size: 24.sp,
+                    iconSize: 24.sp,
+                    onClick: () {
+                      showDatetimePicker(context,
+                          initialDate: controller.currentDate)
+                          .then((value) =>
+                          controller.onDateChange(pickedDatetime: value));
+                    },
                   ),
-                  readOnly: false,
+                  readOnly: true,
                   isSuffix: true,
                   validate: (String? value) {
                     if (value == null || value.isEmpty) {
-                      return 'Enter task here';
+                      return 'Enter date';
                     }
                     return null;
                   },
@@ -78,11 +87,44 @@ class CreateMemoryView extends GetView<MemoriesController> {
         ),
       ),
       bottomNavigationBar: BuildColorPickerUtil(
-        buttonTitle: 'Create',
-        onPickColor: () {},
+        buttonTitle: controller.isCreated == true ? 'Update' : 'Create',
+        child: GetBuilder<CreateMemoryController>(builder: (context) {
+          return ListView.separated(
+            scrollDirection: Axis.horizontal,
+            itemCount: colorsPalettes.length,
+            itemBuilder: (_, index) {
+              return ColorPaletteUtil(
+                selectedColor: colorsPalettes[index],
+                isSelected: controller.currentColor == index,
+                onPickedColor: () {
+                  controller.onColorChange(index);
+                },
+              );
+            },
+            separatorBuilder: (_, index) => const SizedBox(width: 5.0),
+          );
+        }),
         onClick: () {
           if (_globalKey.currentState!.validate()) {
-            print('No data');
+            controller.isCreated == true
+                ? _controller
+                    .updateMemory(
+                      memory: Memory(
+                          title: controller.memory!.title,
+                          content: controller.memory!.content,
+                          dateTime: controller.memory!.dateTime,
+                          color: controller.memory!.color),
+                    )
+                    .then((value) => Get.back())
+                : _controller
+                    .insertMemory(
+                      memory: Memory(
+                          title: controller.titleController.text,
+                          content: controller.memoryController.text,
+                          dateTime: controller.dateController.text,
+                          color: controller.currentColor),
+                    )
+                    .then((value) => Get.back());
           }
         },
       ),

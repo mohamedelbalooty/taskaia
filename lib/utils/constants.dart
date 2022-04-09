@@ -21,9 +21,8 @@ const String noteIdKey = 'noteId';
 const String noteTitleKey = 'noteTitle';
 const String noteContentKey = 'noteContent';
 const String noteDatetimeKey = 'noteDateTime';
-const String noteColorKey = 'taskColor';
-
-// const String noteImageKey = 'noteDateTime';
+const String noteColorKey = 'noteColor';
+const String noteImageKey = 'noteImage';
 
 ///MEMORY OBJECT
 const String memoryTableKey = 'memory';
@@ -31,4 +30,4 @@ const String memoryIdKey = 'memoryId';
 const String memoryTitleKey = 'memoryTitle';
 const String memoryContentKey = 'memoryContent';
 const String memoryDatetimeKey = 'memoryDateTime';
-const String memoryColorKey = 'taskColor';
+const String memoryColorKey = 'memoryColor';

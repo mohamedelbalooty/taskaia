@@ -39,9 +39,11 @@ EdgeInsets padding2() => const EdgeInsets.all(10);
 
 EdgeInsets padding3() => const EdgeInsets.all(20);
 
-EdgeInsets symmetricVerticalPadding1() => const EdgeInsets.symmetric(vertical: 10);
+EdgeInsets symmetricVerticalPadding1() =>
+    const EdgeInsets.symmetric(vertical: 10);
 
-EdgeInsets symmetricVerticalPadding2() => const EdgeInsets.symmetric(vertical: 15);
+EdgeInsets symmetricVerticalPadding2() =>
+    const EdgeInsets.symmetric(vertical: 15);
 
 EdgeInsets symmetricHorizontalPadding1() =>
     const EdgeInsets.symmetric(horizontal: 10);
@@ -361,7 +363,7 @@ class TextFormFieldUtil extends StatelessWidget {
   }
 
   OutlineInputBorder _border() => OutlineInputBorder(
-        borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+        borderRadius: const BorderRadius.all(Radius.circular(10.0)),
         borderSide: BorderSide(
           color: Get.isDarkMode ? Colors.grey.shade300 : blackClr,
           width: 1.5,
@@ -410,46 +412,31 @@ class DividerUtil extends StatelessWidget {
   }
 }
 
-AppBar appBarUtil(
-        {required String title,
-        Widget? leading,
-        List<Widget>? actions,
-        bool? autoLeading,
-        isCenter}) =>
-    AppBar(
-      title: TextUtil(
-        text: title,
-        fontSize: 22.sp,
-        fontWeight: FontWeight.bold,
-        color: whiteClr,
-      ),
-      centerTitle: isCenter,
-      leading: leading,
-      actions: actions,
-      automaticallyImplyLeading: autoLeading ?? false,
-    );
-
 class BuildColorPickerUtil extends StatelessWidget {
   final String buttonTitle;
-  final VoidCallback onPickColor, onClick;
-  // final bool isCreated;
-  const BuildColorPickerUtil({
-    Key? key,
-    required this.buttonTitle,
-    required this.onPickColor,
-    required this.onClick,
-    // required this.isCreated
-  }) : super(key: key);
+  final VoidCallback onClick;
+  final Widget child;
+
+  const BuildColorPickerUtil(
+      {Key? key,
+      required this.buttonTitle,
+      required this.onClick,
+      required this.child})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: (SizeConfigurationHelper.screenOrientation == Orientation.portrait) ?
-      SizeConfigurationHelper.screenHeight > 640.0 ? 87.0 : 75.0 :
-      91.0,
+      height:
+          (SizeConfigurationHelper.screenOrientation == Orientation.portrait)
+              ? SizeConfigurationHelper.screenHeight > 640.0
+                  ? 87.0
+                  : 75.0
+              : 91.0,
       width: infinityWidth,
       child: Padding(
-        padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 5.0, bottom: 10.0),
+        padding: const EdgeInsets.only(
+            left: 15.0, right: 15.0, top: 5.0, bottom: 10.0),
         child: Column(
           children: [
             Divider(
@@ -476,38 +463,7 @@ class BuildColorPickerUtil extends StatelessWidget {
                       SizedBox(
                         height: 28.0,
                         width: infinityWidth,
-                        child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: 3,
-                          itemBuilder: (_, index) {
-                            List<Color> _colors = [blueClr, pinkClr, orangeClr];
-                            return InkWell(
-                              highlightColor: _colors[index].withOpacity(0.5),
-                              splashColor: _colors[index].withOpacity(0.5),
-                              hoverColor: _colors[index].withOpacity(0.5),
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(5.0)),
-                              child: Container(
-                                height: 28.0,
-                                width: 28.0,
-                                decoration: BoxDecoration(
-                                  color: _colors[index],
-                                  shape: BoxShape.circle,
-                                ),
-                                child: const Center(
-                                  child: Icon(
-                                    Icons.check,
-                                    color: whiteClr,
-                                  ),
-                                ),
-                              ),
-                              onTap: onPickColor,
-                            );
-                          },
-                          separatorBuilder: (_, index) => const SizedBox(
-                            width: 12.0,
-                          ),
-                        ),
+                        child: child,
                       ),
                     ],
                   ),
@@ -520,6 +476,7 @@ class BuildColorPickerUtil extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                     color: whiteClr,
                   ),
+                  color: context.theme.appBarTheme.backgroundColor!,
                   radius: 8.0,
                   onClick: onClick,
                 ),
@@ -532,65 +489,168 @@ class BuildColorPickerUtil extends StatelessWidget {
   }
 }
 
+class ColorPaletteUtil extends StatelessWidget {
+  final Color selectedColor;
+  final bool isSelected;
+  final VoidCallback onPickedColor;
+
+  const ColorPaletteUtil(
+      {Key? key,
+      required this.selectedColor,
+      required this.onPickedColor,
+      required this.isSelected})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      highlightColor: selectedColor.withOpacity(0.5),
+      splashColor: selectedColor.withOpacity(0.5),
+      hoverColor: selectedColor.withOpacity(0.5),
+      borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+      child: Container(
+        height: 30.0,
+        width: 30.0,
+        padding: const EdgeInsets.all(2.0),
+        decoration: BoxDecoration(
+          color: transparent,
+          border: Border.all(color: selectedColor, width: 1.5),
+          shape: BoxShape.circle,
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            color: selectedColor,
+            shape: BoxShape.circle,
+          ),
+          child: isSelected
+              ? const Center(
+                  child: Icon(
+                    Icons.check,
+                    size: 22.0,
+                    color: whiteClr,
+                  ),
+                )
+              : const SizedBox(),
+        ),
+      ),
+      onTap: onPickedColor,
+    );
+  }
+}
+
+// class ResponsiveListUtil extends StatelessWidget {
+//   final Widget child;
+//   final int itemCount, columnCount;
+//   final EdgeInsetsGeometry padding;
+//   final bool shrinkWrap;
+//   final ScrollPhysics physics;
+//
+//   const ResponsiveListUtil({
+//     Key? key,
+//     required this.child,
+//     required this.itemCount,
+//     this.columnCount = 2,
+//     this.padding = EdgeInsets.zero,
+//     this.shrinkWrap = false,
+//     this.physics = const BouncingScrollPhysics(),
+//   }) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return LayoutBuilder(
+//       builder: (_, constraints) {
+//         if (SizeConfigurationHelper.screenOrientation == Orientation.portrait) {
+//           return ListView.separated(
+//             padding: padding,
+//             shrinkWrap: shrinkWrap,
+//             physics: physics,
+//             itemCount: itemCount,
+//             itemBuilder: (_, index) => AnimationConfiguration.staggeredList(
+//               position: index,
+//               duration: const Duration(milliseconds: 1300),
+//               child: SlideAnimation(
+//                 horizontalOffset: 300,
+//                 child: FadeInAnimation(child: child),
+//               ),
+//             ),
+//             separatorBuilder: (_, index) => verticalSpace2(),
+//           );
+//         }
+//         return GridView.builder(
+//           padding: padding,
+//           shrinkWrap: shrinkWrap,
+//           physics: physics,
+//           itemCount: itemCount,
+//           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+//               crossAxisCount: columnCount,
+//               mainAxisSpacing: 10.h,
+//               crossAxisSpacing: 10.w,
+//               childAspectRatio: 1.3),
+//           itemBuilder: (_, index) => AnimationConfiguration.staggeredGrid(
+//             columnCount: 2,
+//             position: index,
+//             duration: const Duration(milliseconds: 1375),
+//             child: SlideAnimation(
+//               horizontalOffset: 300,
+//               child: FadeInAnimation(child: child),
+//             ),
+//           ),
+//         );
+//       },
+//     );
+//   }
+// }
+
 class ResponsiveListUtil extends StatelessWidget {
   final Widget child;
-  final int itemCount, columnCount;
-  final EdgeInsetsGeometry padding;
-  final bool shrinkWrap;
-  final ScrollPhysics physics;
+  final int indexPosition;
 
-  const ResponsiveListUtil({
-    Key? key,
-    required this.child,
-    required this.itemCount,
-    this.columnCount = 2,
-    this.padding = EdgeInsets.zero,
-    this.shrinkWrap = false,
-    this.physics = const BouncingScrollPhysics(),
-  }) : super(key: key);
+  const ResponsiveListUtil(
+      {Key? key, required this.child, required this.indexPosition})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (_, constraints) {
-        if (SizeConfigurationHelper.screenOrientation == Orientation.portrait) {
-          return ListView.separated(
-            padding: padding,
-            shrinkWrap: shrinkWrap,
-            physics: physics,
-            itemCount: itemCount,
-            itemBuilder: (_, index) => AnimationConfiguration.staggeredList(
-              position: index,
-              duration: const Duration(milliseconds: 1300),
-              child: SlideAnimation(
-                horizontalOffset: 300,
-                child: FadeInAnimation(child: child),
-              ),
-            ),
-            separatorBuilder: (_, index) => verticalSpace2(),
-          );
-        }
-        return GridView.builder(
-          padding: padding,
-          shrinkWrap: shrinkWrap,
-          physics: physics,
-          itemCount: itemCount,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: columnCount,
-              mainAxisSpacing: 10.h,
-              crossAxisSpacing: 10.w,
-              childAspectRatio: 1.3
-          ),
-          itemBuilder: (_, index) => AnimationConfiguration.staggeredGrid(
-            columnCount: 2,
-            position: index,
-            duration: const Duration(milliseconds: 1375),
-            child: SlideAnimation(
-              horizontalOffset: 300,
-              child: FadeInAnimation(child: child),
-            ),
+        return AnimationConfiguration.staggeredList(
+          position: indexPosition,
+          duration: const Duration(milliseconds: 1300),
+          child: SlideAnimation(
+            horizontalOffset: 300,
+            child: FadeInAnimation(child: child),
           ),
         );
+        // if (SizeConfigurationHelper.screenOrientation == Orientation.portrait) {
+        //   return AnimationConfiguration.staggeredList(
+        //     position: indexPosition,
+        //     duration: const Duration(milliseconds: 1300),
+        //     child: SlideAnimation(
+        //       horizontalOffset: 300,
+        //       child: FadeInAnimation(child: child),
+        //     ),
+        //   );
+        // }
+        // return GridView.builder(
+        //   padding: padding,
+        //   shrinkWrap: shrinkWrap,
+        //   physics: physics,
+        //   itemCount: itemCount,
+        //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        //       crossAxisCount: columnCount,
+        //       mainAxisSpacing: 10.h,
+        //       crossAxisSpacing: 10.w,
+        //       childAspectRatio: 1.3),
+        //   itemBuilder: (_, index) => AnimationConfiguration.staggeredGrid(
+        //     columnCount: 2,
+        //     position: index,
+        //     duration: const Duration(milliseconds: 1375),
+        //     child: SlideAnimation(
+        //       horizontalOffset: 300,
+        //       child: FadeInAnimation(child: child),
+        //     ),
+        //   ),
+        // );
       },
     );
   }
@@ -598,6 +658,7 @@ class ResponsiveListUtil extends StatelessWidget {
 
 class EmptyWidgetUtil extends StatelessWidget {
   final String image;
+
   const EmptyWidgetUtil({Key? key, required this.image}) : super(key: key);
 
   @override
@@ -610,4 +671,72 @@ class EmptyWidgetUtil extends StatelessWidget {
       ),
     );
   }
+}
+
+AppBar appBarUtil(
+        {required String title,
+        Widget? leading,
+        List<Widget>? actions,
+        bool? autoLeading,
+        isCenter}) =>
+    AppBar(
+      title: TextUtil(
+        text: title,
+        fontSize: 22.sp,
+        fontWeight: FontWeight.bold,
+        color: whiteClr,
+      ),
+      centerTitle: isCenter,
+      leading: leading,
+      actions: actions,
+      automaticallyImplyLeading: autoLeading ?? false,
+    );
+
+Future<DateTime?> showDatetimePicker(
+  BuildContext context, {
+  required DateTime initialDate,
+}) async {
+  DateTime? pickedDatetime = await showDatePicker(
+    context: context,
+    initialDate: initialDate,
+    firstDate: DateTime(2016),
+    lastDate: DateTime.now(),
+  );
+  return pickedDatetime;
+}
+
+Future<TimeOfDay?> showTimingPicker(
+  BuildContext context, {
+  required bool isStartTime,
+}) async {
+  TimeOfDay? pickedTime = await showTimePicker(
+    context: context,
+    initialTime: isStartTime
+        ? TimeOfDay.now()
+        : TimeOfDay.fromDateTime(
+            DateTime.now().add(const Duration(minutes: 15)),
+          ),
+  );
+  return pickedTime;
+}
+
+void showBottomSheetUtil({required Widget bottomSheetWidget}) {
+  Get.bottomSheet(
+    bottomSheetWidget,
+  );
+}
+
+SnackbarController showSnackBar(
+    {required String title, required String message, SnackPosition? position}) {
+  return Get.snackbar(
+    title,
+    message,
+    snackPosition: position,
+    backgroundColor: Get.isDarkMode ? darkHeaderClr : lightHeaderClr,
+    borderRadius: 5.0,
+    padding: symmetricHorizontalPadding1(),
+    margin: const EdgeInsets.all(10),
+    duration: const Duration(seconds: 2),
+    colorText: whiteClr,
+  );
 }

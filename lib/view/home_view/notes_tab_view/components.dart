@@ -1,19 +1,29 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../model/note.dart';
 import '../../../utils/theme/colors.dart';
 import '../../app_components.dart';
 
 class BuildNoteWidget extends StatelessWidget {
-  const BuildNoteWidget({Key? key}) : super(key: key);
+  final Note note;
+  final VoidCallback onClick;
+
+  const BuildNoteWidget({Key? key, required this.note, required this.onClick})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(10.0),
       constraints: BoxConstraints(maxWidth: infinityWidth, minHeight: 80.0),
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(12.0)),
-        color: pinkClr,
+      decoration: BoxDecoration(
+        color: note.color == 0
+            ? blueClr
+            : note.color == 1
+                ? pinkClr
+                : orangeClr,
+        borderRadius: const BorderRadius.all(Radius.circular(12.0)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -21,7 +31,7 @@ class BuildNoteWidget extends StatelessWidget {
           RotatedBox(
             quarterTurns: 3,
             child: TextUtil(
-              text: 'Todo',
+              text: note.title,
               fontSize: 16.sp,
               color: whiteClr,
               fontWeight: FontWeight.w600,
@@ -41,8 +51,7 @@ class BuildNoteWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextUtil(
-                    text:
-                    'MediaQuery. I am a noob, so would really like to understand. Otherwise,',
+                    text: note.content,
                     fontSize: 16.sp,
                     color: whiteClr,
                     fontWeight: FontWeight.w500,
@@ -59,7 +68,7 @@ class BuildNoteWidget extends StatelessWidget {
                       const SizedBox(width: 10.0),
                       Expanded(
                         child: TextUtil(
-                          text: DateTime.now().toString(),
+                          text: note.dateTime,
                           fontSize: 14.sp,
                           color: whiteClr,
                           fontWeight: FontWeight.w600,
@@ -72,18 +81,28 @@ class BuildNoteWidget extends StatelessWidget {
               ),
             ),
           ),
-          horizontalSpace2(),
-          Expanded(
-            child: ClipRRect(
-              borderRadius: const BorderRadius.all(Radius.circular(12.0)),
-              child: Image.network(
-                'https://images.ctfassets.net/hrltx12pl8hq/2TRIFRwcjrTuNprkTQHVxs/088159eb8e811aaac789c24701d7fdb1/LP_image.jpg?fit=fill&w=480&h=268',
-                height: 80,
-                width: 80,
-                fit: BoxFit.fill,
+          horizontalSpace1(),
+          note.image != '' ? Expanded(
+            child: Container(
+              height: 110.w,
+              width: 110.w,
+              padding: const EdgeInsets.all(2.0),
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(12.0)),
+                border: Border.all(
+                  color: whiteClr,
+                  width: 1.5,
+                ),
+              ),
+              child: ClipRRect(
+                borderRadius: const BorderRadius.all(Radius.circular(12.0)),
+                child: Image.file(
+                  File(note.image!),
+                  fit: BoxFit.fill,
+                ),
               ),
             ),
-          ),
+          ) : const SizedBox(width: 10.0,),
         ],
       ),
     );

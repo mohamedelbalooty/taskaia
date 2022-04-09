@@ -1,3 +1,4 @@
+import '../utils/constants.dart';
 import 'database_model.dart';
 
 class Task extends DatabaseModel {
@@ -24,32 +25,31 @@ class Task extends DatabaseModel {
 
   factory Task.fromJson(Map<String, dynamic> json) {
     return Task(
-      id: json['id'],
-      title: json['title'],
-      content: json['content'],
-      repeat: json['repeat'],
-      dateTime: json['dateTime'],
-      startTime: json['startTime'],
-      endTime: json['endTime'],
-      color: json['color'],
-      isCompleted: json['isCompleted'],
-      remind: json['remind'],
+      id: json[taskIdKey],
+      title: json[taskTitleKey],
+      content: json[taskContentKey],
+      repeat: json[taskRepeatKey],
+      dateTime: json[taskDatetimeKey],
+      startTime: json[taskStartTimeKey],
+      endTime: json[taskEndTimeKey],
+      color: json[taskColorKey],
+      isCompleted: json[taskIsCompletedKey],
+      remind: json[taskReminderKey],
     );
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'title': title,
-      'content': content,
-      'repeat': repeat,
-      'date': dateTime,
-      'startTime': startTime,
-      'endTime': endTime,
-      'color': color,
-      'isCompleted': isCompleted,
-      'remind': remind,
+      taskTitleKey: title,
+      taskContentKey: content,
+      taskRepeatKey: repeat,
+      taskDatetimeKey: dateTime,
+      taskStartTimeKey: startTime,
+      taskEndTimeKey: endTime,
+      taskColorKey: color,
+      taskIsCompletedKey: isCompleted,
+      taskReminderKey: remind,
     };
   }
 }

@@ -31,11 +31,11 @@ class BuildHomeAppBar extends GetView<HomeController> {
         icon: Get.isDarkMode ? Icons.brightness_2 : Icons.brightness_2_outlined,
         color: whiteClr,
         iconSize: 26.sp,
-        // onClick: () => ThemeController().changeThemeMode(),
-        onClick: (){
-          NotificationHelper.displayNotification(title: 'title', body: 'body');
-          // NotificationHelper.scheduleNotification(title: 'title', body: 'body');
-        },
+        onClick: () => ThemeController().changeThemeMode(),
+        // onClick: (){
+        //   NotificationHelper.displayNotification(title: 'title', body: 'body');
+        //   // NotificationHelper.scheduleNotification(title: 'title', body: 'body');
+        // },
       ),
       actions: [
         Padding(

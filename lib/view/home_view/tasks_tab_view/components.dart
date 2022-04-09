@@ -3,9 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:taskaia/controller/controllers/tasks_controller.dart';
+import '../../../controller/bindings/create_task_binding.dart';
+import '../../../model/task.dart';
 import '../../../utils/helper/size_configuration_helper.dart';
 import '../../../utils/theme/colors.dart';
 import '../../app_components.dart';
+import '../../create_task_view/create_task_view.dart';
 
 class BuildDatePickerWidget extends StatelessWidget {
   BuildDatePickerWidget({Key? key}) : super(key: key);
@@ -82,9 +86,11 @@ class BuildDatePickerWidget extends StatelessWidget {
 }
 
 class BuildTaskWidget extends StatelessWidget {
+  final Task task;
   final VoidCallback onClick;
 
-  const BuildTaskWidget({Key? key, required this.onClick}) : super(key: key);
+  const BuildTaskWidget({Key? key, required this.task, required this.onClick})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -93,9 +99,13 @@ class BuildTaskWidget extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
         constraints: BoxConstraints(maxWidth: infinityWidth, minHeight: 80.0),
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(12.0)),
-          color: orangeClr,
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(Radius.circular(12.0)),
+          color: task.color == 0
+              ? blueClr
+              : task.color == 1
+                  ? pinkClr
+                  : orangeClr,
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -106,25 +116,33 @@ class BuildTaskWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TextUtil(
-                      text: 'Task 1 here',
-                      fontSize: 18.sp,
+                      text: task.title.capitalize!,
+                      fontSize: 22.sp,
                       color: whiteClr,
                       fontWeight: FontWeight.bold,
                       maxLines: 1,
                       textOverflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 2.0),
+                    verticalSpace2(),
+                    TextUtil(
+                      text: task.content,
+                      fontSize: 16.sp,
+                      color: whiteClr,
+                      fontWeight: FontWeight.w500,
+                      textAlign: TextAlign.justify,
+                    ),
+                    verticalSpace1(),
                     Row(
                       children: [
                         Icon(
-                          Icons.access_time,
-                          size: 22.sp,
+                          Icons.date_range,
+                          size: 20.sp,
                           color: whiteClr,
                         ),
                         const SizedBox(width: 10.0),
                         Expanded(
                           child: TextUtil(
-                            text: DateTime.now().toString(),
+                            text: task.dateTime,
                             fontSize: 14.sp,
                             color: whiteClr,
                             fontWeight: FontWeight.w600,
@@ -134,13 +152,24 @@ class BuildTaskWidget extends StatelessWidget {
                       ],
                     ),
                     verticalSpace1(),
-                    TextUtil(
-                      text:
-                          'MediaQuery. I am a noob, so would really like to understand. Otherwise,',
-                      fontSize: 16.sp,
-                      color: whiteClr,
-                      fontWeight: FontWeight.w500,
-                      textAlign: TextAlign.justify,
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.access_time,
+                          size: 20.sp,
+                          color: whiteClr,
+                        ),
+                        const SizedBox(width: 10.0),
+                        Expanded(
+                          child: TextUtil(
+                            text: '${task.startTime} to ${task.endTime}',
+                            fontSize: 14.sp,
+                            color: whiteClr,
+                            fontWeight: FontWeight.w600,
+                            textOverflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -156,7 +185,7 @@ class BuildTaskWidget extends StatelessWidget {
             RotatedBox(
               quarterTurns: 3,
               child: TextUtil(
-                text: 'Todo',
+                text: task.isCompleted == 0 ? 'Not Completed' : 'Completed',
                 fontSize: 16.sp,
                 color: whiteClr,
                 fontWeight: FontWeight.w600,
@@ -169,23 +198,16 @@ class BuildTaskWidget extends StatelessWidget {
   }
 }
 
-class BuildTaskBottomSheetWidget extends StatelessWidget {
-  final int isCompleted;
+class BuildTaskBottomSheetWidget extends GetView<TasksController> {
+  final Task task;
 
-  const BuildTaskBottomSheetWidget({Key? key, required this.isCompleted})
+  const BuildTaskBottomSheetWidget({Key? key, required this.task})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height:
-          (SizeConfigurationHelper.screenOrientation == Orientation.portrait)
-              ? (isCompleted == 0)
-                  ? SizeConfigurationHelper.screenHeight * 0.23
-                  : SizeConfigurationHelper.screenHeight * 0.32
-              : (isCompleted == 0)
-                  ? SizeConfigurationHelper.screenHeight * 0.41
-                  : SizeConfigurationHelper.screenHeight * 0.6,
+      height: 210.0,
       width: infinityWidth,
       margin: symmetricHorizontalPadding2(),
       decoration: BoxDecoration(
@@ -205,24 +227,29 @@ class BuildTaskBottomSheetWidget extends StatelessWidget {
                   horizontal: SizeConfigurationHelper.screenWidth * 0.25),
               child: const Divider(color: greyClr, thickness: 5.0),
             ),
+            const Spacer(),
             const SizedBox(height: 5.0),
-            isCompleted == 1
-                ? ElevatedButtonUtil(
-                    size: Size(infinityWidth, 50.0),
-                    radius: 8.0,
-                    color: context.theme.appBarTheme.backgroundColor!,
-                    child: TextUtil(
-                      text: 'Complete Task',
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.bold,
-                      color: whiteClr,
-                    ),
-                    onClick: () {
-                      Get.back();
-                    },
-                  )
-                : const SizedBox(),
-            SizedBox(height: isCompleted == 1 ? 5.0 : 0.0),
+            ElevatedButtonUtil(
+              size: Size(infinityWidth, 50.0),
+              radius: 8.0,
+              color: context.theme.appBarTheme.backgroundColor!,
+              child: TextUtil(
+                text: task.isCompleted == 0 ? 'Complete Task' : 'Update Task',
+                fontSize: 20.sp,
+                fontWeight: FontWeight.bold,
+                color: whiteClr,
+              ),
+              onClick: () async{
+                task.isCompleted == 0
+                    ? controller.updateRowTask(id: task.id!).then((value) => Get.back())
+                    : await Get.to(
+                        () => CreateTaskView(),
+                        binding: CreateTaskBinding(isCreated: true, task: task),
+                      )?.then((value) => Get.back());
+
+              },
+            ),
+            const SizedBox(height: 5.0),
             ElevatedButtonUtil(
               size: Size(infinityWidth, 50.0),
               radius: 8.0,
@@ -233,7 +260,8 @@ class BuildTaskBottomSheetWidget extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 color: whiteClr,
               ),
-              onClick: () {
+              onClick: () async{
+                await controller.deleteTask(id: task.id!);
                 Get.back();
               },
             ),
@@ -256,8 +284,3 @@ class BuildTaskBottomSheetWidget extends StatelessWidget {
   }
 }
 
-void showTaskBottomSheet({required int isCompleted}) {
-  Get.bottomSheet(
-    BuildTaskBottomSheetWidget(isCompleted: isCompleted),
-  );
-}

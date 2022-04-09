@@ -1,3 +1,4 @@
+import '../utils/constants.dart';
 import 'database_model.dart';
 
 class Memory extends DatabaseModel {
@@ -16,22 +17,21 @@ class Memory extends DatabaseModel {
 
   factory Memory.fromJson(Map<String, dynamic> json) {
     return Memory(
-      id: json['id'],
-      title: json['title'],
-      content: json['content'],
-      dateTime: json['dateTime'],
-      color: json['color'],
+      id: json[memoryIdKey],
+      title: json[memoryTitleKey],
+      content: json[memoryContentKey],
+      dateTime: json[memoryDatetimeKey],
+      color: json[memoryColorKey],
     );
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'title': title,
-      'memory': content,
-      'dateTime': dateTime,
-      'color': color
+      memoryTitleKey: title,
+      memoryContentKey: content,
+      memoryDatetimeKey: dateTime,
+      memoryColorKey: color
     };
   }
 }

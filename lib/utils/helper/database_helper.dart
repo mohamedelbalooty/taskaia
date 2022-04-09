@@ -25,7 +25,14 @@ class DataBaseHelper {
       dbName,
       version: 1,
       onCreate: (Database db, int version) async {
-        await db.execute('''
+        await onCreateDatabase(db: db, version: version);
+      },
+    );
+  }
+
+  Future<void> onCreateDatabase(
+      {required Database db, required int version}) async {
+    await db.execute('''
           CREATE TABLE $taskTableKey(
           $taskIdKey INTEGER PRIMARY KEY AUTOINCREMENT,
           $taskTitleKey TEXT NOT NULL,
@@ -38,15 +45,16 @@ class DataBaseHelper {
           $taskIsCompletedKey INTEGER NOT NULL,
           $taskColorKey INTEGER NOT NULL)
           ''');
-        await db.execute('''
+    await db.execute('''
           CREATE TABLE $noteTableKey(
           $noteIdKey INTEGER PRIMARY KEY AUTOINCREMENT,
           $noteTitleKey TEXT NOT NULL,
           $noteContentKey TEXT NOT NULL,
           $noteDatetimeKey TEXT NOT NULL,
+          $noteImageKey TEXT NOT NULL,
           $noteColorKey INTEGER NOT NULL)
           ''');
-        await db.execute('''
+    await db.execute('''
           CREATE TABLE $memoryTableKey(
           $memoryIdKey INTEGER PRIMARY KEY AUTOINCREMENT,
           $memoryTitleKey TEXT NOT NULL,
@@ -54,8 +62,6 @@ class DataBaseHelper {
           $memoryDatetimeKey TEXT NOT NULL,
           $memoryColorKey INTEGER NOT NULL)
           ''');
-      },
-    );
   }
 
   Future<void> insertOnDatabase(
@@ -64,7 +70,7 @@ class DataBaseHelper {
     await dbClint!.insert(
       table,
       databaseModel.toJson(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
+      conflictAlgorithm: ConflictAlgorithm.ignore,
     );
   }
 
@@ -76,33 +82,35 @@ class DataBaseHelper {
   }
 
   Future<void> updateOnDatabase(
-      {required String table, required DatabaseModel databaseModel}) async {
+      {required String table,
+      required String tableId,
+      required DatabaseModel databaseModel}) async {
     Database? dbClint = await database;
     await dbClint!.update(
       table,
       databaseModel.toJson(),
-      where: '${databaseModel.id} = ?',
+      where: '$tableId = ?',
       whereArgs: ['${databaseModel.id}'],
       conflictAlgorithm: ConflictAlgorithm.ignore,
     );
   }
 
   Future<void> rowUpdateOnDatabase(
-      {required String table, required int id}) async {
+      {required String table, required String tableId, required int id}) async {
     Database? dbClint = await database;
     await dbClint!.rawUpdate('''
       UPDATE $table
       SET $taskIsCompletedKey = ?
-      WHERE id = ?
+      WHERE $tableId = ?
       ''', [1, id]);
   }
 
   Future<void> deleteFromDatabase(
-      {required String table, required int id}) async {
+      {required String table, required String tableId, required int id}) async {
     Database? dbClint = await database;
     await dbClint!.delete(
       table,
-      where: '$id = ?',
+      where: '$tableId = ?',
       whereArgs: ['$id'],
     );
   }

@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:taskaia/view/create_note_view/create_note_view.dart';
+import '../../controller/bindings/create_task_binding.dart';
 import '../../controller/bindings/home_binding.dart';
 import '../../view/create_memory_view/create_memory_view.dart';
 import '../../view/create_task_view/create_task_view.dart';
@@ -25,10 +26,11 @@ class Routes {
       name: RoutesPath.createNoteView,
       page: () =>  CreateNoteView(),
     ),
-    GetPage(
-      name: RoutesPath.createTaskView,
-      page: () => CreateTaskView(),
-    ),
+    // GetPage(
+    //   name: RoutesPath.createTaskView,
+    //   page: () => CreateTaskView(),
+    //   binding: CreateTaskBinding()
+    // ),
     GetPage(
       name: RoutesPath.createMemoryView,
       page: () =>  CreateMemoryView(),

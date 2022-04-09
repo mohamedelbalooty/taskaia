@@ -9,7 +9,7 @@ import '../../app_components.dart';
 Step buildStepWidget({required Memory memory}) {
   return Step(
     title: TextUtil(
-      text: memory.title,
+      text: memory.title.capitalize!,
       fontSize: 18.sp,
       color: Get.isDarkMode ? whiteClr : blackClr,
       fontWeight: FontWeight.bold,
@@ -47,51 +47,125 @@ Step buildStepWidget({required Memory memory}) {
   );
 }
 
-// class BuildStepControlWidget extends StatelessWidget {
-//   const BuildStepControlWidget({Key? key}) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Row(
-//       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//       children: [
-//         ElevatedButtonUtil(
-//           child: TextUtil(
-//               text: 'Next',
-//               fontSize: 16.sp,
-//               fontWeight: FontWeight.normal,
-//               color: whiteClr),
-//           radius: 8.0,
-//           color: Theme.of(context).appBarTheme.backgroundColor!,
-//           onClick: () {
-//             if (_index > 0) {
-//               setState(() {
-//                 _index -= 1;
-//               });
-//             }
-//           },
-//           size: const Size(50, 30),
-//         ),
-//         (_index == 0)
-//             ? const SizedBox()
-//             : ElevatedButtonUtil(
-//           child: TextUtil(
-//               text: 'Previous',
-//               fontSize: 16.sp,
-//               fontWeight: FontWeight.normal,
-//               color: whiteClr),
-//           radius: 8.0,
-//           color: Theme.of(context).appBarTheme.backgroundColor!,
-//           onClick: () {
-//             if (_index <= 0) {
-//               setState(() {
-//                 _index += 1;
-//               });
-//             }
-//           },
-//           size: const Size(50, 30),
-//         ),
-//       ],
-//     );
-//   }
-// }
+class BuildStepWidget extends StatelessWidget {
+  final Memory memory;
+  final VoidCallback onClick;
+
+  const BuildStepWidget({Key? key, required this.memory, required this.onClick})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: infinityWidth,
+      constraints: BoxConstraints(
+        minHeight: 150.h,
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(top: 55.h),
+            child: SizedBox(
+              width: 55,
+              child: Expanded(
+                child: TextUtil(
+                  text: memory.dateTime.split(',')[0],
+                  fontSize: 18.0,
+                  color: Get.isDarkMode ? whiteClr : blackClr,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+          horizontalSpace1(),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                height: 50.h,
+                width: 2.0,
+                color: Get.isDarkMode ? whiteClr : blackClr,
+              ),
+              Container(
+                height: 35.0,
+                width: 35.0,
+                padding: const EdgeInsets.all(2.0),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Get.isDarkMode ? whiteClr : blackClr,
+                    width: 2.0,
+                  ),
+                  shape: BoxShape.circle,
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Get.isDarkMode ? whiteClr : blackClr,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ),
+              Container(
+                height: 100.h,
+                width: 2.0,
+                color: Get.isDarkMode ? whiteClr : blackClr,
+              ),
+            ],
+          ),
+          horizontalSpace1(),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.only(top: 65.h),
+              child: InkWell(
+                onTap: onClick,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(12.0),
+                  bottomLeft: Radius.circular(12.0),
+                  bottomRight: Radius.circular(12.0),
+                ),
+                child: Container(
+                  height: 110.h,
+                  width: infinityWidth,
+                  padding: const EdgeInsets.all(1.0),
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadiusDirectional.only(
+                      topEnd: Radius.circular(12.0),
+                      bottomStart: Radius.circular(12.0),
+                      bottomEnd: Radius.circular(12.0),
+                    ),
+                    border: Border.all(
+                      color: Get.isDarkMode ? whiteClr : blackClr,
+                      width: 1.5,
+                    ),
+                  ),
+                  child: Container(
+                    padding: padding2(),
+                    decoration: BoxDecoration(
+                      color: memory.color == 0
+                          ? blueClr
+                          : memory.color == 1
+                              ? pinkClr
+                              : orangeClr,
+                      borderRadius: const BorderRadiusDirectional.only(
+                        topEnd: Radius.circular(12.0),
+                        bottomStart: Radius.circular(12.0),
+                        bottomEnd: Radius.circular(12.0),
+                      ),
+                    ),
+                    child: TextUtil(
+                      text: memory.content,
+                      fontSize: 16.sp,
+                      color: whiteClr,
+                      fontWeight: FontWeight.w500,
+                      textAlign: TextAlign.justify,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

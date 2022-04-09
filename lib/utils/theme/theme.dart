@@ -23,9 +23,11 @@ class AppTheme {
   static final ThemeData darkTheme = ThemeData(
     primaryColor: darkHeaderClr,
     primarySwatch: Palette.swatchDarkColor,
+
     colorScheme: ColorScheme.fromSwatch(
       accentColor: darkHeaderClr,
       primarySwatch: Palette.swatchDarkColor,
+      primaryColorDark: darkHeaderClr,
       brightness: Brightness.dark,
     ),
     appBarTheme: const AppBarTheme(
