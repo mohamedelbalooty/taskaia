@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:taskaia/view/app_components.dart';
 import '../../model/note.dart';
 
 class CreateNoteController extends GetxController {
@@ -34,7 +35,7 @@ class CreateNoteController extends GetxController {
       final String fileName = basename(pickedImage!.path);
       localImage = await pickedImage!.copy('$path/$fileName');
     } catch (exception) {
-      print(exception.toString());
+      showSnackBar(title: 'error'.tr, message: 'image_error'.tr);
     }
     update();
   }
@@ -59,7 +60,11 @@ class CreateNoteController extends GetxController {
 
   void detectCurrentTextControllers() {
     titleController.text = note!.title;
+    noteController.text = note!.content;
+    dateController.text = note!.dateTime;
     currentColor = note!.color;
+    pickedImage = File(note!.image!);
+    localImage = File(note!.image!);
   }
 
   @override

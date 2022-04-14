@@ -6,7 +6,6 @@ import '../../controller/controllers/tasks_controller.dart';
 import '../../model/task.dart';
 import '../../utils/theme/colors.dart';
 import '../app_components.dart';
-import 'components.dart';
 
 class CreateTaskView extends GetView<CreateTaskController> {
   CreateTaskView({Key? key}) : super(key: key);
@@ -18,9 +17,8 @@ class CreateTaskView extends GetView<CreateTaskController> {
     return Scaffold(
       backgroundColor: context.theme.scaffoldBackgroundColor,
       appBar: appBarUtil(
-        title: 'Create task',
+        title: 'create_task'.tr,
         autoLeading: true,
-        isCenter: false,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -30,51 +28,51 @@ class CreateTaskView extends GetView<CreateTaskController> {
             child: Column(
               children: [
                 verticalSpace1(),
-                BuildTaskItemWidget(
-                  title: 'Title',
+                BuildTextInputItemWidget(
+                  title: 'title'.tr,
                   controller: controller.titleController,
-                  hint: 'Enter task title here',
+                  hint: 'title_hint'.tr,
                   validate: (String? value) {
                     if (value == null || value.isEmpty) {
-                      return 'Enter task title';
+                      return 'title_verify'.tr;
                     }
                     return null;
                   },
                 ),
                 verticalSpace2(),
-                BuildTaskItemWidget(
-                  title: 'Task',
+                BuildTextInputItemWidget(
+                  title: 'description'.tr,
                   controller: controller.taskController,
-                  hint: 'Enter task here',
+                  hint: 'description_hint'.tr,
                   maxLines: 3,
                   validate: (String? value) {
                     if (value == null || value.isEmpty) {
-                      return 'Enter task';
+                      return 'description_verify'.tr;
                     }
                     return null;
                   },
                 ),
                 verticalSpace2(),
-                BuildTaskItemWidget(
-                  title: 'Date',
+                BuildTextInputItemWidget(
+                  title: 'datetime'.tr,
                   controller: controller.dateController,
-                  hint: 'Enter task here',
+                  hint: 'datetime_hint'.tr,
                   icon: IconButtonUtil(
                     icon: Icons.date_range,
                     color: Get.isDarkMode ? Colors.grey.shade300 : blackClr,
                     iconSize: 24.sp,
                     onClick: () {
                       showDatetimePicker(context,
-                              initialDate: controller.currentDate)
+                          initialDate: controller.currentDate)
                           .then((value) =>
-                              controller.onDateChange(pickedDatetime: value));
+                          controller.onDateChange(pickedDatetime: value));
                     },
                   ),
                   readOnly: true,
                   isSuffix: true,
                   validate: (String? value) {
                     if (value == null || value.isEmpty) {
-                      return 'Enter date';
+                      return 'datetime_verify'.tr;
                     }
                     return null;
                   },
@@ -83,10 +81,10 @@ class CreateTaskView extends GetView<CreateTaskController> {
                 Row(
                   children: [
                     Expanded(
-                      child: BuildTaskItemWidget(
-                        title: 'Start time',
+                      child: BuildTextInputItemWidget(
+                        title: 'start_time'.tr,
                         controller: controller.startTimeController,
-                        hint: 'Enter Start time',
+                        hint: 'start_time_hint'.tr,
                         icon: IconButtonUtil(
                           icon: Icons.access_time,
                           color:
@@ -102,7 +100,7 @@ class CreateTaskView extends GetView<CreateTaskController> {
                         isSuffix: true,
                         validate: (String? value) {
                           if (value == null || value.isEmpty) {
-                            return 'Enter time';
+                            return 'start_time_verify'.tr;
                           }
                           return null;
                         },
@@ -110,10 +108,10 @@ class CreateTaskView extends GetView<CreateTaskController> {
                     ),
                     horizontalSpace2(),
                     Expanded(
-                      child: BuildTaskItemWidget(
-                        title: 'End time',
+                      child: BuildTextInputItemWidget(
+                        title: 'end_time'.tr,
                         controller: controller.endTimeController,
-                        hint: 'Enter time',
+                        hint: 'end_time_hint'.tr,
                         icon: IconButtonUtil(
                           icon: Icons.access_time,
                           color:
@@ -129,7 +127,7 @@ class CreateTaskView extends GetView<CreateTaskController> {
                         isSuffix: true,
                         validate: (String? value) {
                           if (value == null || value.isEmpty) {
-                            return 'Enter time';
+                            return 'end_time_verify'.tr;
                           }
                           return null;
                         },
@@ -138,10 +136,10 @@ class CreateTaskView extends GetView<CreateTaskController> {
                   ],
                 ),
                 verticalSpace2(),
-                BuildTaskItemWidget(
-                  title: 'Reminder',
+                BuildTextInputItemWidget(
+                  title: 'reminder'.tr,
                   controller: controller.reminderController,
-                  hint: 'Enter reminder here',
+                  hint: 'reminder_hint'.tr,
                   icon: BuildPopUpMenuButtonUtil(
                     icon: Icon(
                       Icons.keyboard_arrow_down_rounded,
@@ -159,16 +157,16 @@ class CreateTaskView extends GetView<CreateTaskController> {
                   isSuffix: true,
                   validate: (String? value) {
                     if (value == null || value.isEmpty) {
-                      return 'Enter reminder';
+                      return 'reminder_verify'.tr;
                     }
                     return null;
                   },
                 ),
                 verticalSpace2(),
-                BuildTaskItemWidget(
-                  title: 'Repeat',
+                BuildTextInputItemWidget(
+                  title: 'repeat'.tr,
                   controller: controller.repeatController,
-                  hint: 'Enter repeat here',
+                  hint: 'repeat_hint'.tr,
                   icon: BuildPopUpMenuButtonUtil(
                     icon: Icon(
                       Icons.keyboard_arrow_down_rounded,
@@ -184,7 +182,7 @@ class CreateTaskView extends GetView<CreateTaskController> {
                   isSuffix: true,
                   validate: (String? value) {
                     if (value == null || value.isEmpty) {
-                      return 'Enter repeat';
+                      return 'repeat_verify'.tr;
                     }
                     return null;
                   },
@@ -196,7 +194,7 @@ class CreateTaskView extends GetView<CreateTaskController> {
         ),
       ),
       bottomNavigationBar: BuildColorPickerUtil(
-        buttonTitle: controller.isCreated == true ? 'Update' : 'Create',
+        buttonTitle: controller.isCreated == true ? 'update'.tr : 'create'.tr,
         child: GetBuilder<CreateTaskController>(builder: (context) {
           return ListView.separated(
             scrollDirection: Axis.horizontal,

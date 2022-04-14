@@ -1,13 +1,9 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../utils/theme/colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 import '../utils/helper/size_configuration_helper.dart';
 
 double infinityHeight = double.infinity;
@@ -121,6 +117,48 @@ class ElevatedButtonUtil extends StatelessWidget {
   }
 }
 
+class TextButtonUtil extends StatelessWidget {
+  final String text;
+  final double fontSize;
+  final double? height;
+  final Color color;
+  final FontWeight fontWeight;
+  final String? fontFamily;
+  final TextDecoration? decoration;
+  final EdgeInsets? padding;
+  final Function() onClick;
+
+  const TextButtonUtil(
+      {Key? key,
+      required this.text,
+      required this.onClick,
+      this.color = whiteClr,
+      this.fontSize = 16.0,
+      this.fontWeight = FontWeight.normal,
+      this.fontFamily,
+      this.decoration,
+      this.height,
+      this.padding})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      child: TextUtil(
+        text: text,
+        color: color,
+        fontSize: fontSize,
+        fontWeight: fontWeight,
+        fontFamily: fontFamily,
+        decoration: decoration,
+        height: height,
+      ),
+      style: ButtonStyle(padding: MaterialStateProperty.all(padding)),
+      onPressed: onClick,
+    );
+  }
+}
+
 class FloatingActionButtonUtil extends StatelessWidget {
   final IconData icon;
   final VoidCallback onClick;
@@ -134,17 +172,18 @@ class FloatingActionButtonUtil extends StatelessWidget {
     return FloatingActionButton(
       child: Icon(
         icon,
-        color: whiteClr,
-        size: 32.sp,
+        color: Get.isDarkMode ? whiteClr : blackClr,
+        size: 34.sp,
       ),
       backgroundColor: context.theme.appBarTheme.backgroundColor,
       shape: OutlineInputBorder(
         borderRadius: const BorderRadius.all(Radius.circular(15.0)),
         borderSide: BorderSide(
-          color: Colors.grey.shade300,
+          color: Get.isDarkMode ? whiteClr : blackClr,
           width: 2,
         ),
       ),
+      tooltip: 'create'.tr,
       onPressed: onClick,
     );
   }
@@ -224,17 +263,10 @@ class BuildPopUpMenuButtonUtil extends StatelessWidget {
             PopupMenuItem<String>(
               value: entries[i],
               child: Text(entries[i]),
-              textStyle: Get.deviceLocale!.languageCode == 'en'
-                  ? GoogleFonts.lato(
-                      textStyle: const TextStyle(
-                        color: whiteClr,
-                      ),
-                    )
-                  : GoogleFonts.cairo(
-                      textStyle: const TextStyle(
-                        color: whiteClr,
-                      ),
-                    ),
+              textStyle: TextStyle(
+                color: Get.isDarkMode ? whiteClr : blackClr,
+                fontWeight: FontWeight.w600
+              ),
             ),
           );
         }
@@ -247,6 +279,7 @@ class BuildPopUpMenuButtonUtil extends StatelessWidget {
   }
 }
 
+/// APP WIDGETS
 class TextUtil extends StatelessWidget {
   final String text;
   final double fontSize;
@@ -277,27 +310,14 @@ class TextUtil extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: Get.deviceLocale!.languageCode == 'en'
-          ? GoogleFonts.lato(
-              textStyle: TextStyle(
-                color: color,
-                fontSize: fontSize,
-                fontWeight: fontWeight,
-                fontFamily: fontFamily,
-                height: height,
-                decoration: decoration,
-              ),
-            )
-          : GoogleFonts.cairo(
-              textStyle: TextStyle(
-                color: color,
-                fontSize: fontSize,
-                fontWeight: fontWeight,
-                fontFamily: fontFamily,
-                height: height,
-                decoration: decoration,
-              ),
-            ),
+      style: TextStyle(
+        color: color,
+        fontSize: fontSize,
+        fontWeight: fontWeight,
+        fontFamily: fontFamily,
+        height: height,
+        decoration: decoration,
+      ),
       textAlign: textAlign,
       overflow: textOverflow,
       maxLines: maxLines,
@@ -323,7 +343,7 @@ class TextFormFieldUtil extends StatelessWidget {
     this.icon,
     this.onTap,
     this.maxLines = 1,
-    this.height = 16.0,
+    this.height = 14.0,
     this.readOnly = false,
     this.isSuffix = false,
   }) : super(key: key);
@@ -335,9 +355,9 @@ class TextFormFieldUtil extends StatelessWidget {
       onTap: onTap,
       validator: validate,
       style: TextStyle(
-        color: Get.isDarkMode ? Colors.grey.shade300 : blackClr,
+        color: Get.isDarkMode ? whiteClr : blackClr,
         fontSize: 16.sp,
-        fontWeight: FontWeight.w400,
+        fontWeight: FontWeight.w600,
       ),
       maxLines: maxLines,
       readOnly: readOnly,
@@ -347,9 +367,14 @@ class TextFormFieldUtil extends StatelessWidget {
             EdgeInsets.symmetric(horizontal: 10.0, vertical: height),
         hintText: hint,
         hintStyle: TextStyle(
-          color: Get.isDarkMode ? Colors.grey.shade300 : blackClr,
-          fontSize: 16.sp,
-          fontWeight: FontWeight.w400,
+          color: Get.isDarkMode ? whiteClr : blackClr,
+          fontSize: 15.sp,
+          fontWeight: FontWeight.w600,
+        ),
+        errorStyle: TextStyle(
+          color: Colors.redAccent,
+          fontSize: 14.sp,
+          fontWeight: FontWeight.bold,
         ),
         suffixIcon: isSuffix ? icon : const SizedBox(),
         border: _border(),
@@ -363,7 +388,7 @@ class TextFormFieldUtil extends StatelessWidget {
   }
 
   OutlineInputBorder _border() => OutlineInputBorder(
-        borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+        borderRadius: const BorderRadius.all(Radius.circular(12.0)),
         borderSide: BorderSide(
           color: Get.isDarkMode ? Colors.grey.shade300 : blackClr,
           width: 1.5,
@@ -412,6 +437,56 @@ class DividerUtil extends StatelessWidget {
   }
 }
 
+class BuildTextInputItemWidget extends StatelessWidget {
+  final String title;
+  final TextEditingController controller;
+  final String hint;
+  final Widget? icon;
+  final String? Function(String?) validate;
+  final VoidCallback? onTap;
+  final int maxLines;
+  final bool readOnly, isSuffix;
+
+  const BuildTextInputItemWidget({
+    Key? key,
+    required this.title,
+    required this.controller,
+    required this.hint,
+    required this.validate,
+    this.onTap,
+    this.icon,
+    this.maxLines = 1,
+    this.readOnly = false,
+    this.isSuffix = false,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextUtil(
+          text: title,
+          fontSize: 20.sp,
+          fontWeight: FontWeight.bold,
+          color: Get.isDarkMode ? whiteClr : blackClr,
+        ),
+        verticalSpace1(),
+        TextFormFieldUtil(
+          controller: controller,
+          validate: validate,
+          onTap: onTap,
+          hint: hint,
+          icon: icon,
+          maxLines: maxLines,
+          readOnly: readOnly,
+          isSuffix: isSuffix,
+        ),
+      ],
+    );
+  }
+}
+
 class BuildColorPickerUtil extends StatelessWidget {
   final String buttonTitle;
   final VoidCallback onClick;
@@ -429,7 +504,7 @@ class BuildColorPickerUtil extends StatelessWidget {
     return SizedBox(
       height:
           (SizeConfigurationHelper.screenOrientation == Orientation.portrait)
-              ? SizeConfigurationHelper.screenHeight > 640.0
+              ? (SizeConfigurationHelper.screenHeight > 640.0)
                   ? 87.0
                   : 75.0
               : 91.0,
@@ -454,10 +529,11 @@ class BuildColorPickerUtil extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TextUtil(
-                        text: 'Color',
+                        text: 'color'.tr,
                         fontSize: 20.sp,
                         fontWeight: FontWeight.bold,
                         color: Get.isDarkMode ? whiteClr : blackClr,
+                        height: 1.2,
                       ),
                       const SizedBox(height: 5.0),
                       SizedBox(
@@ -474,7 +550,7 @@ class BuildColorPickerUtil extends StatelessWidget {
                     text: buttonTitle,
                     fontSize: 18.sp,
                     fontWeight: FontWeight.bold,
-                    color: whiteClr,
+                    color: Get.isDarkMode ? whiteClr : blackClr,
                   ),
                   color: context.theme.appBarTheme.backgroundColor!,
                   radius: 8.0,
@@ -523,11 +599,11 @@ class ColorPaletteUtil extends StatelessWidget {
             shape: BoxShape.circle,
           ),
           child: isSelected
-              ? const Center(
+              ? Center(
                   child: Icon(
                     Icons.check,
                     size: 22.0,
-                    color: whiteClr,
+                    color: Get.isDarkMode ? whiteClr : blackClr,
                   ),
                 )
               : const SizedBox(),
@@ -538,120 +614,23 @@ class ColorPaletteUtil extends StatelessWidget {
   }
 }
 
-// class ResponsiveListUtil extends StatelessWidget {
-//   final Widget child;
-//   final int itemCount, columnCount;
-//   final EdgeInsetsGeometry padding;
-//   final bool shrinkWrap;
-//   final ScrollPhysics physics;
-//
-//   const ResponsiveListUtil({
-//     Key? key,
-//     required this.child,
-//     required this.itemCount,
-//     this.columnCount = 2,
-//     this.padding = EdgeInsets.zero,
-//     this.shrinkWrap = false,
-//     this.physics = const BouncingScrollPhysics(),
-//   }) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return LayoutBuilder(
-//       builder: (_, constraints) {
-//         if (SizeConfigurationHelper.screenOrientation == Orientation.portrait) {
-//           return ListView.separated(
-//             padding: padding,
-//             shrinkWrap: shrinkWrap,
-//             physics: physics,
-//             itemCount: itemCount,
-//             itemBuilder: (_, index) => AnimationConfiguration.staggeredList(
-//               position: index,
-//               duration: const Duration(milliseconds: 1300),
-//               child: SlideAnimation(
-//                 horizontalOffset: 300,
-//                 child: FadeInAnimation(child: child),
-//               ),
-//             ),
-//             separatorBuilder: (_, index) => verticalSpace2(),
-//           );
-//         }
-//         return GridView.builder(
-//           padding: padding,
-//           shrinkWrap: shrinkWrap,
-//           physics: physics,
-//           itemCount: itemCount,
-//           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-//               crossAxisCount: columnCount,
-//               mainAxisSpacing: 10.h,
-//               crossAxisSpacing: 10.w,
-//               childAspectRatio: 1.3),
-//           itemBuilder: (_, index) => AnimationConfiguration.staggeredGrid(
-//             columnCount: 2,
-//             position: index,
-//             duration: const Duration(milliseconds: 1375),
-//             child: SlideAnimation(
-//               horizontalOffset: 300,
-//               child: FadeInAnimation(child: child),
-//             ),
-//           ),
-//         );
-//       },
-//     );
-//   }
-// }
-
-class ResponsiveListUtil extends StatelessWidget {
+class AnimatedItemUtil extends StatelessWidget {
   final Widget child;
   final int indexPosition;
 
-  const ResponsiveListUtil(
+  const AnimatedItemUtil(
       {Key? key, required this.child, required this.indexPosition})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (_, constraints) {
-        return AnimationConfiguration.staggeredList(
-          position: indexPosition,
-          duration: const Duration(milliseconds: 1300),
-          child: SlideAnimation(
-            horizontalOffset: 300,
-            child: FadeInAnimation(child: child),
-          ),
-        );
-        // if (SizeConfigurationHelper.screenOrientation == Orientation.portrait) {
-        //   return AnimationConfiguration.staggeredList(
-        //     position: indexPosition,
-        //     duration: const Duration(milliseconds: 1300),
-        //     child: SlideAnimation(
-        //       horizontalOffset: 300,
-        //       child: FadeInAnimation(child: child),
-        //     ),
-        //   );
-        // }
-        // return GridView.builder(
-        //   padding: padding,
-        //   shrinkWrap: shrinkWrap,
-        //   physics: physics,
-        //   itemCount: itemCount,
-        //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        //       crossAxisCount: columnCount,
-        //       mainAxisSpacing: 10.h,
-        //       crossAxisSpacing: 10.w,
-        //       childAspectRatio: 1.3),
-        //   itemBuilder: (_, index) => AnimationConfiguration.staggeredGrid(
-        //     columnCount: 2,
-        //     position: index,
-        //     duration: const Duration(milliseconds: 1375),
-        //     child: SlideAnimation(
-        //       horizontalOffset: 300,
-        //       child: FadeInAnimation(child: child),
-        //     ),
-        //   ),
-        // );
-      },
+    return AnimationConfiguration.staggeredList(
+      position: indexPosition,
+      duration: const Duration(milliseconds: 1300),
+      child: SlideAnimation(
+        horizontalOffset: 300,
+        child: FadeInAnimation(child: child),
+      ),
     );
   }
 }
@@ -673,20 +652,152 @@ class EmptyWidgetUtil extends StatelessWidget {
   }
 }
 
+class BorderUtil extends StatelessWidget {
+  final Widget child;
+  final Color color;
+  final double? height, width;
+  final EdgeInsets? padding;
+  final BoxConstraints? constraints;
+  final bool isAllBorder;
+  final double radius, topRight, topLeft, bottomLeft, bottomRight;
+
+  const BorderUtil(
+      {Key? key,
+      required this.child,
+      required this.color,
+      this.height,
+      this.width,
+      this.padding,
+      this.constraints,
+      this.isAllBorder = true,
+      this.radius = 12.0,
+      this.topRight = 12.0,
+      this.topLeft = 12.0,
+      this.bottomLeft = 12.0,
+      this.bottomRight = 12.0})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: height,
+      width: width,
+      padding: padding ?? EdgeInsets.zero,
+      constraints: constraints,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: isAllBorder == true
+            ? BorderRadius.circular(radius)
+            : BorderRadius.only(
+                topRight: Radius.circular(topRight),
+                topLeft: Radius.circular(topLeft),
+                bottomLeft: Radius.circular(bottomLeft),
+                bottomRight: Radius.circular(bottomRight),
+              ),
+        border: Border.all(
+          color: Get.isDarkMode ? whiteClr : blackClr,
+          width: 2.0,
+        ),
+      ),
+      child: child,
+    );
+  }
+}
+
+class BuildBottomSheetUtil extends StatelessWidget {
+  final VoidCallback onUpdate, onDelete;
+  final String? updateTitle;
+
+  const BuildBottomSheetUtil(
+      {Key? key,
+      required this.onUpdate,
+      required this.onDelete,
+      this.updateTitle})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 210.0,
+      width: infinityWidth,
+      margin: symmetricHorizontalPadding2(),
+      decoration: BoxDecoration(
+        color: context.theme.scaffoldBackgroundColor,
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(10.0),
+          topRight: Radius.circular(10.0),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: SizeConfigurationHelper.screenWidth * 0.25),
+              child: const Divider(color: greyClr, thickness: 5.0),
+            ),
+            const SizedBox(height: 5.0),
+            ElevatedButtonUtil(
+              size: Size(infinityWidth, 50.0),
+              radius: 8.0,
+              color: context.theme.appBarTheme.backgroundColor!,
+              child: TextUtil(
+                text: updateTitle ?? 'update'.tr,
+                fontSize: 20.sp,
+                fontWeight: FontWeight.bold,
+                color: Get.isDarkMode ? whiteClr : blackClr,
+              ),
+              onClick: onUpdate,
+            ),
+            const SizedBox(height: 5.0),
+            const Spacer(),
+            ElevatedButtonUtil(
+              size: Size(infinityWidth, 50.0),
+              radius: 8.0,
+              color: context.theme.appBarTheme.backgroundColor!,
+              child: TextUtil(
+                text: 'delete'.tr,
+                fontSize: 20.sp,
+                fontWeight: FontWeight.bold,
+                color: Get.isDarkMode ? whiteClr : blackClr,
+              ),
+              onClick: onDelete,
+            ),
+            const DividerUtil(color: greyClr, thickness: 2.0),
+            ElevatedButtonUtil(
+                size: Size(infinityWidth, 50.0),
+                radius: 8.0,
+                color: context.theme.appBarTheme.backgroundColor!,
+                child: TextUtil(
+                  text: 'cancel'.tr,
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.bold,
+                  color: Get.isDarkMode ? whiteClr : blackClr,
+                ),
+                onClick: () => Get.back())
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// SHOWING FUNCTIONS
+
 AppBar appBarUtil(
         {required String title,
         Widget? leading,
         List<Widget>? actions,
-        bool? autoLeading,
-        isCenter}) =>
+        bool? autoLeading}) =>
     AppBar(
       title: TextUtil(
         text: title,
         fontSize: 22.sp,
         fontWeight: FontWeight.bold,
-        color: whiteClr,
+        color: Get.isDarkMode ? whiteClr : blackClr,
       ),
-      centerTitle: isCenter,
       leading: leading,
       actions: actions,
       automaticallyImplyLeading: autoLeading ?? false,
@@ -697,11 +808,20 @@ Future<DateTime?> showDatetimePicker(
   required DateTime initialDate,
 }) async {
   DateTime? pickedDatetime = await showDatePicker(
-    context: context,
-    initialDate: initialDate,
-    firstDate: DateTime(2016),
-    lastDate: DateTime.now(),
-  );
+      context: context,
+      builder: (context, child) => Theme(
+          data: ThemeData().copyWith(
+              colorScheme: ColorScheme.light(
+            primary: Get.isDarkMode ? darkHeaderClr : lightHeaderClr,
+            surface: Get.isDarkMode ? darkBodyClr : lightBodyClr,
+            onPrimary: Get.isDarkMode ? whiteClr : blackClr,
+          )),
+          child: child!),
+      initialDate: initialDate,
+      firstDate: DateTime(2016),
+      lastDate: DateTime.now(),
+      cancelText: 'cancel'.tr,
+      confirmText: 'ok'.tr);
   return pickedDatetime;
 }
 
@@ -710,13 +830,24 @@ Future<TimeOfDay?> showTimingPicker(
   required bool isStartTime,
 }) async {
   TimeOfDay? pickedTime = await showTimePicker(
-    context: context,
-    initialTime: isStartTime
-        ? TimeOfDay.now()
-        : TimeOfDay.fromDateTime(
-            DateTime.now().add(const Duration(minutes: 15)),
-          ),
-  );
+      context: context,
+      builder: (context, child) => Theme(
+          data: ThemeData().copyWith(
+              colorScheme: ColorScheme.light(
+            primary: Get.isDarkMode ? darkHeaderClr : lightHeaderClr,
+            surface: Get.isDarkMode ? darkBodyClr : lightBodyClr,
+            onPrimary: Get.isDarkMode ? whiteClr : blackClr,
+            onSurface: Get.isDarkMode ? whiteClr : blackClr,
+            onBackground: Get.isDarkMode ? whiteClr : blackClr,
+          )),
+          child: child!),
+      initialTime: isStartTime
+          ? TimeOfDay.now()
+          : TimeOfDay.fromDateTime(
+              DateTime.now().add(const Duration(minutes: 15)),
+            ),
+      cancelText: 'cancel'.tr,
+      confirmText: 'ok'.tr);
   return pickedTime;
 }
 
@@ -727,16 +858,16 @@ void showBottomSheetUtil({required Widget bottomSheetWidget}) {
 }
 
 SnackbarController showSnackBar(
-    {required String title, required String message, SnackPosition? position}) {
+    {required String title, required String message}) {
   return Get.snackbar(
     title,
     message,
-    snackPosition: position,
+    snackPosition: SnackPosition.BOTTOM,
     backgroundColor: Get.isDarkMode ? darkHeaderClr : lightHeaderClr,
-    borderRadius: 5.0,
-    padding: symmetricHorizontalPadding1(),
-    margin: const EdgeInsets.all(10),
-    duration: const Duration(seconds: 2),
-    colorText: whiteClr,
+    borderRadius: 12.0,
+    padding: padding2(),
+    margin: const EdgeInsets.all(10.0),
+    duration: const Duration(seconds: 3),
+    colorText: Get.isDarkMode ? whiteClr : blackClr,
   );
 }

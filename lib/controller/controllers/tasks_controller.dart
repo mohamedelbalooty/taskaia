@@ -1,9 +1,11 @@
 import 'package:get/get.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:taskaia/model/task.dart';
 import '../../utils/constants.dart';
 import '../../utils/helper/database_helper.dart';
 
 class TasksController extends GetxController {
+
   RxList<Task> tasks = <Task>[].obs;
   final DataBaseHelper dbHelper = DataBaseHelper.dbHelper;
 
@@ -43,5 +45,6 @@ class TasksController extends GetxController {
   void onInit() {
     super.onInit();
     getTasks();
+    initializeDateFormatting();
   }
 }

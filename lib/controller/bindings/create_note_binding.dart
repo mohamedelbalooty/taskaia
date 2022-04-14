@@ -10,6 +10,6 @@ class CreateNoteBinding extends Bindings {
 
   @override
   void dependencies() {
-    Get.put(CreateNoteController());
+    Get.put(CreateNoteController(isCreated: isCreated, note: note));
   }
 }

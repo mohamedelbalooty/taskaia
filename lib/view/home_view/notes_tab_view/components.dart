@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import '../../../model/note.dart';
 import '../../../utils/theme/colors.dart';
 import '../../app_components.dart';
@@ -14,96 +15,85 @@ class BuildNoteWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(10.0),
-      constraints: BoxConstraints(maxWidth: infinityWidth, minHeight: 80.0),
-      decoration: BoxDecoration(
+    return GestureDetector(
+      onTap: onClick,
+      child: BorderUtil(
+        padding: padding2(),
+        constraints: BoxConstraints(maxWidth: infinityWidth, minHeight: 80.h),
         color: note.color == 0
             ? blueClr
             : note.color == 1
                 ? pinkClr
                 : orangeClr,
-        borderRadius: const BorderRadius.all(Radius.circular(12.0)),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          RotatedBox(
-            quarterTurns: 3,
-            child: TextUtil(
-              text: note.title,
-              fontSize: 16.sp,
-              color: whiteClr,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          horizontalSpace2(),
-          Container(
-            height: 70.0,
-            width: 1.0,
-            color: whiteClr,
-          ),
-          horizontalSpace2(),
-          Expanded(
-            flex: 2,
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TextUtil(
-                    text: note.content,
-                    fontSize: 16.sp,
-                    color: whiteClr,
-                    fontWeight: FontWeight.w500,
-                    textAlign: TextAlign.justify,
-                  ),
-                  verticalSpace1(),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.date_range,
-                        size: 22.sp,
-                        color: whiteClr,
-                      ),
-                      const SizedBox(width: 10.0),
-                      Expanded(
-                        child: TextUtil(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Container(
+                constraints:
+                    BoxConstraints(maxWidth: infinityWidth, minHeight: 80.h),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextUtil(
+                      text: note.title,
+                      fontSize: 20.sp,
+                      color: Get.isDarkMode ? whiteClr : blackClr,
+                      fontWeight: FontWeight.bold,
+                      maxLines: 2,
+                      textOverflow: TextOverflow.ellipsis,
+                    ),
+                    verticalSpace1(),
+                    TextUtil(
+                      text: note.content,
+                      fontSize: 16.sp,
+                      color: Get.isDarkMode ? whiteClr : blackClr,
+                      fontWeight: FontWeight.w600,
+                      textAlign: TextAlign.justify,
+                    ),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.date_range,
+                          size: 22.sp,
+                          color: Get.isDarkMode ? whiteClr : blackClr,
+                        ),
+                        const SizedBox(width: 10.0),
+                        TextUtil(
                           text: note.dateTime,
                           fontSize: 14.sp,
-                          color: whiteClr,
+                          color: Get.isDarkMode ? whiteClr : blackClr,
                           fontWeight: FontWeight.w600,
                           textOverflow: TextOverflow.ellipsis,
                         ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            horizontalSpace1(),
+            note.image != ''
+                ? BorderUtil(
+                    height: 110.w,
+                    width: 110.w,
+                    color: transparent,
+                    child: ClipRRect(
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(11.0)),
+                      child: Image.file(
+                        File(note.image!),
+                        fit: BoxFit.fill,
                       ),
-                    ],
+                    ),
+                  )
+                : const SizedBox(
+                    width: 10.0,
                   ),
-                ],
-              ),
-            ),
-          ),
-          horizontalSpace1(),
-          note.image != '' ? Expanded(
-            child: Container(
-              height: 110.w,
-              width: 110.w,
-              padding: const EdgeInsets.all(2.0),
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(12.0)),
-                border: Border.all(
-                  color: whiteClr,
-                  width: 1.5,
-                ),
-              ),
-              child: ClipRRect(
-                borderRadius: const BorderRadius.all(Radius.circular(12.0)),
-                child: Image.file(
-                  File(note.image!),
-                  fit: BoxFit.fill,
-                ),
-              ),
-            ),
-          ) : const SizedBox(width: 10.0,),
-        ],
+          ],
+        ),
       ),
     );
   }

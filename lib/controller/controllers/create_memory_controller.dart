@@ -26,6 +26,8 @@ class CreateMemoryController extends GetxController {
 
   void detectCurrentTextControllers() {
     titleController.text = memory!.title;
+    memoryController.text = memory!.content;
+    dateController.text = memory!.dateTime;
     currentColor = memory!.color;
   }
 

@@ -23,8 +23,8 @@ class CreateTaskController extends GetxController {
       .format(DateTime.now().add(const Duration(minutes: 15)))
       .toString();
   final List<int> reminderList = [5, 10, 15, 20];
-  final List<String> repeatList = ['None', 'Daily', 'Weekly', 'Monthly'];
-  String currentRepeat = 'None';
+  final List<String> repeatList = ['none'.tr, 'daily'.tr, 'weekly'.tr, 'monthly'.tr];
+  String currentRepeat = 'none'.tr;
   int currentReminder = 5;
   int currentColor = 0;
 

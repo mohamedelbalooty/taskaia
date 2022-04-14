@@ -6,7 +6,6 @@ import '../../controller/controllers/notes_controller.dart';
 import '../../model/note.dart';
 import '../../utils/theme/colors.dart';
 import '../app_components.dart';
-import '../create_task_view/components.dart';
 import 'components.dart';
 
 class CreateNoteView extends GetView<CreateNoteController> {
@@ -19,9 +18,8 @@ class CreateNoteView extends GetView<CreateNoteController> {
     return Scaffold(
       backgroundColor: context.theme.scaffoldBackgroundColor,
       appBar: appBarUtil(
-        title: 'Create note',
+        title: 'create_note'.tr,
         autoLeading: true,
-        isCenter: false,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -32,51 +30,51 @@ class CreateNoteView extends GetView<CreateNoteController> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 verticalSpace1(),
-                BuildTaskItemWidget(
-                  title: 'Title',
+                BuildTextInputItemWidget(
+                  title: 'title'.tr,
                   controller: controller.titleController,
-                  hint: 'Enter note title here',
+                  hint: 'title_hint'.tr,
                   validate: (String? value) {
                     if (value == null || value.isEmpty) {
-                      return 'Enter note title';
+                      return 'title_verify'.tr;
                     }
                     return null;
                   },
                 ),
                 verticalSpace2(),
-                BuildTaskItemWidget(
-                  title: 'Note',
+                BuildTextInputItemWidget(
+                  title: 'description'.tr,
                   controller: controller.noteController,
-                  hint: 'Enter note here',
+                  hint: 'description_hint'.tr,
                   maxLines: 3,
                   validate: (String? value) {
                     if (value == null || value.isEmpty) {
-                      return 'Enter note ';
+                      return 'description_verify'.tr;
                     }
                     return null;
                   },
                 ),
                 verticalSpace2(),
-                BuildTaskItemWidget(
-                  title: 'Date',
+                BuildTextInputItemWidget(
+                  title: 'datetime'.tr,
                   controller: controller.dateController,
-                  hint: 'Enter task here',
+                  hint: 'datetime_hint'.tr,
                   icon: IconButtonUtil(
                     icon: Icons.date_range,
                     color: Get.isDarkMode ? Colors.grey.shade300 : blackClr,
                     iconSize: 24.sp,
                     onClick: () {
                       showDatetimePicker(context,
-                          initialDate: controller.currentDate)
+                              initialDate: controller.currentDate)
                           .then((value) =>
-                          controller.onDateChange(pickedDatetime: value));
+                              controller.onDateChange(pickedDatetime: value));
                     },
                   ),
                   readOnly: true,
                   isSuffix: true,
                   validate: (String? value) {
                     if (value == null || value.isEmpty) {
-                      return 'Enter date';
+                      return 'datetime_verify'.tr;
                     }
                     return null;
                   },
@@ -90,7 +88,7 @@ class CreateNoteView extends GetView<CreateNoteController> {
         ),
       ),
       bottomNavigationBar: BuildColorPickerUtil(
-        buttonTitle: controller.isCreated == true ? 'Update' : 'Create',
+        buttonTitle: controller.isCreated == true ? 'update'.tr : 'create'.tr,
         child: GetBuilder<CreateNoteController>(builder: (context) {
           return ListView.separated(
             scrollDirection: Axis.horizontal,
@@ -113,12 +111,13 @@ class CreateNoteView extends GetView<CreateNoteController> {
                 ? _controller
                     .updateNote(
                         note: Note(
-                            id: controller.note!.id,
-                            title: controller.note!.title,
-                            content: controller.note!.content,
-                            dateTime: controller.note!.dateTime,
-                            color: controller.note!.color,
-                            image: controller.note!.image ?? ''))
+                      id: controller.note!.id,
+                      title: controller.titleController.text,
+                      content: controller.noteController.text,
+                      dateTime: controller.dateController.text,
+                      color: controller.currentColor,
+                      image: controller.localImage?.path.toString() ?? '',
+                    ))
                     .then((value) => Get.back())
                 : _controller
                     .insertNotes(

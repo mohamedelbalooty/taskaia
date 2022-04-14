@@ -14,7 +14,7 @@ class PickImageWidget extends GetView<CreateNoteController> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextUtil(
-          text: 'Image',
+          text: 'image'.tr,
           fontSize: 20.sp,
           fontWeight: FontWeight.bold,
           color: Get.isDarkMode ? whiteClr : blackClr,
@@ -34,7 +34,7 @@ class PickImageWidget extends GetView<CreateNoteController> {
                   width: 1.5,
                 ),
               ),
-              child: controller.pickedImage == null
+              child: controller.pickedImage?.path == null || controller.pickedImage?.path == ''
                   ? Icon(
                       Icons.add_a_photo_outlined,
                       size: 40.sp,

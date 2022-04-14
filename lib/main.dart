@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'controller/controllers/language_controller.dart';
 import 'controller/controllers/theme_controller.dart';
 import 'utils/get_service/get_service.dart';
 import 'utils/localization/localization.dart';
 import 'utils/routes/routes.dart';
 import 'utils/theme/theme.dart';
-import 'utils/helper/size_configuration_helper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,13 +20,7 @@ Future initializationService() async {
 
 class TaskaiaApp extends StatelessWidget {
   const TaskaiaApp({Key? key}) : super(key: key);
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-  //     SizeConfiguration.initSizeConfiguration(context);
-  //   });
-  // }
+
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -35,10 +29,10 @@ class TaskaiaApp extends StatelessWidget {
       splitScreenMode: true,
       builder: () => GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Taskaia App',
+        title: 'Taskaia',
         initialRoute: Routes.initialRoute,
         getPages: Routes.pageRoutes,
-        locale: const Locale('en'),
+        locale: Locale(LanguageController().localLang),
         fallbackLocale: Get.deviceLocale,
         translations: AppLocalization(),
         builder: (context, widget) {

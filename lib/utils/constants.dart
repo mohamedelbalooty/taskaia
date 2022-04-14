@@ -1,5 +1,7 @@
 ///CACHE KEYS
+const String onboardingKey = 'onboardingKey';
 const String darkModeKey = 'darkModeKey';
+const String languageKey = 'languageKey';
 ///DATABASE KEYS
 const String databaseKey = 'taskaia';
 ///TASK OBJECT

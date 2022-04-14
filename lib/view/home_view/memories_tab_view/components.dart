@@ -1,57 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import '../../../model/memory.dart';
 import '../../../utils/theme/colors.dart';
 import '../../app_components.dart';
 
-Step buildStepWidget({required Memory memory}) {
-  return Step(
-    title: TextUtil(
-      text: memory.title.capitalize!,
-      fontSize: 18.sp,
-      color: Get.isDarkMode ? whiteClr : blackClr,
-      fontWeight: FontWeight.bold,
-    ),
-    subtitle: TextUtil(
-      text: memory.dateTime,
-      fontSize: 14.sp,
-      color: Get.isDarkMode ? whiteClr : blackClr,
-      fontWeight: FontWeight.w500,
-    ),
-    content: AnimationConfiguration.staggeredList(
-      position: 0,
-      duration: const Duration(milliseconds: 1300),
-      child: SlideAnimation(
-        horizontalOffset: 300,
-        child: Container(
-          padding: const EdgeInsets.all(10.0),
-          alignment: Alignment.centerLeft,
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(8.0)),
-            color: pinkClr,
-          ),
-          child: TextUtil(
-            text: memory.content,
-            fontSize: 16.sp,
-            color: whiteClr,
-            fontWeight: FontWeight.w500,
-            textAlign: TextAlign.justify,
-          ),
-        ),
-      ),
-    ),
-    isActive: true,
-    state: StepState.indexed,
-  );
-}
-
 class BuildStepWidget extends StatelessWidget {
   final Memory memory;
+  final int index;
   final VoidCallback onClick;
 
-  const BuildStepWidget({Key? key, required this.memory, required this.onClick})
+  const BuildStepWidget(
+      {Key? key,
+      required this.memory,
+      required this.index,
+      required this.onClick})
       : super(key: key);
 
   @override
@@ -65,36 +28,34 @@ class BuildStepWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: EdgeInsets.only(top: 55.h),
+            padding: EdgeInsets.only(top: 40.h),
             child: SizedBox(
-              width: 55,
-              child: Expanded(
-                child: TextUtil(
-                  text: memory.dateTime.split(',')[0],
-                  fontSize: 18.0,
-                  color: Get.isDarkMode ? whiteClr : blackClr,
-                  fontWeight: FontWeight.bold,
-                ),
+              width: 25.0,
+              child: TextUtil(
+                text: index.toString(),
+                fontSize: 18.0,
+                color: Get.isDarkMode ? whiteClr : blackClr,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
-          horizontalSpace1(),
+          const SizedBox(width: 2.0),
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                height: 50.h,
-                width: 2.0,
+                height: 40.h,
+                width: 2.w,
                 color: Get.isDarkMode ? whiteClr : blackClr,
               ),
               Container(
                 height: 35.0,
                 width: 35.0,
-                padding: const EdgeInsets.all(2.0),
+                padding: const EdgeInsets.all(3.0),
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: Get.isDarkMode ? whiteClr : blackClr,
-                    width: 2.0,
+                    width: 2.w,
                   ),
                   shape: BoxShape.circle,
                 ),
@@ -106,7 +67,7 @@ class BuildStepWidget extends StatelessWidget {
                 ),
               ),
               Container(
-                height: 100.h,
+                height: 130.h,
                 width: 2.0,
                 color: Get.isDarkMode ? whiteClr : blackClr,
               ),
@@ -115,50 +76,65 @@ class BuildStepWidget extends StatelessWidget {
           horizontalSpace1(),
           Expanded(
             child: Padding(
-              padding: EdgeInsets.only(top: 65.h),
-              child: InkWell(
+              padding: EdgeInsets.only(top: 50.h),
+              child: GestureDetector(
                 onTap: onClick,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(12.0),
-                  bottomLeft: Radius.circular(12.0),
-                  bottomRight: Radius.circular(12.0),
-                ),
-                child: Container(
-                  height: 110.h,
+                child: BorderUtil(
                   width: infinityWidth,
-                  padding: const EdgeInsets.all(1.0),
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadiusDirectional.only(
-                      topEnd: Radius.circular(12.0),
-                      bottomStart: Radius.circular(12.0),
-                      bottomEnd: Radius.circular(12.0),
-                    ),
-                    border: Border.all(
-                      color: Get.isDarkMode ? whiteClr : blackClr,
-                      width: 1.5,
-                    ),
+                  constraints: BoxConstraints(
+                    minHeight: 100.h,
+                    maxHeight: 130.h,
                   ),
-                  child: Container(
-                    padding: padding2(),
-                    decoration: BoxDecoration(
-                      color: memory.color == 0
-                          ? blueClr
-                          : memory.color == 1
-                              ? pinkClr
-                              : orangeClr,
-                      borderRadius: const BorderRadiusDirectional.only(
-                        topEnd: Radius.circular(12.0),
-                        bottomStart: Radius.circular(12.0),
-                        bottomEnd: Radius.circular(12.0),
+                  padding: padding2(),
+                  color: memory.color == 0
+                      ? blueClr
+                      : memory.color == 1
+                          ? pinkClr
+                          : orangeClr,
+                  isAllBorder: false,
+                  topLeft: 0.0,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextUtil(
+                        text: memory.title,
+                        fontSize: 20.sp,
+                        color: Get.isDarkMode ? whiteClr : blackClr,
+                        fontWeight: FontWeight.bold,
+                        maxLines: 2,
+                        textOverflow: TextOverflow.ellipsis,
                       ),
-                    ),
-                    child: TextUtil(
-                      text: memory.content,
-                      fontSize: 16.sp,
-                      color: whiteClr,
-                      fontWeight: FontWeight.w500,
-                      textAlign: TextAlign.justify,
-                    ),
+                      verticalSpace1(),
+                      Expanded(
+                        child: TextUtil(
+                          text: memory.content,
+                          fontSize: 16.sp,
+                          color: Get.isDarkMode ? whiteClr : blackClr,
+                          fontWeight: FontWeight.w600,
+                          textAlign: TextAlign.justify,
+                          textOverflow: TextOverflow.fade,
+                          height: 1.3,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.date_range,
+                            size: 22.sp,
+                            color: Get.isDarkMode ? whiteClr : blackClr,
+                          ),
+                          const SizedBox(width: 10.0),
+                          TextUtil(
+                            text: memory.dateTime,
+                            fontSize: 14.sp,
+                            color: Get.isDarkMode ? whiteClr : blackClr,
+                            fontWeight: FontWeight.w600,
+                            textOverflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),

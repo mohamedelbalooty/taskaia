@@ -6,7 +6,6 @@ import '../../controller/controllers/create_memory_controller.dart';
 import '../../controller/controllers/memories_controller.dart';
 import '../../utils/theme/colors.dart';
 import '../app_components.dart';
-import '../create_task_view/components.dart';
 
 class CreateMemoryView extends GetView<CreateMemoryController> {
   CreateMemoryView({Key? key}) : super(key: key);
@@ -19,9 +18,8 @@ class CreateMemoryView extends GetView<CreateMemoryController> {
     return Scaffold(
       backgroundColor: context.theme.scaffoldBackgroundColor,
       appBar: appBarUtil(
-        title: 'Create memory',
+        title: 'create_memory'.tr,
         autoLeading: true,
-        isCenter: false,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -31,35 +29,35 @@ class CreateMemoryView extends GetView<CreateMemoryController> {
             child: Column(
               children: [
                 verticalSpace1(),
-                BuildTaskItemWidget(
-                  title: 'Title',
+                BuildTextInputItemWidget(
+                  title: 'title'.tr,
                   controller: controller.titleController,
-                  hint: 'Enter memory title here',
+                  hint: 'title_hint'.tr,
                   validate: (String? value) {
                     if (value == null || value.isEmpty) {
-                      return 'Enter memory title';
+                      return 'title_verify'.tr;
                     }
                     return null;
                   },
                 ),
                 verticalSpace2(),
-                BuildTaskItemWidget(
-                  title: 'Note',
+                BuildTextInputItemWidget(
+                  title: 'description'.tr,
                   controller: controller.memoryController,
-                  hint: 'Enter memory here',
+                  hint: 'description_hint'.tr,
                   maxLines: 3,
                   validate: (String? value) {
                     if (value == null || value.isEmpty) {
-                      return 'Enter memory here';
+                      return 'description_verify'.tr;
                     }
                     return null;
                   },
                 ),
                 verticalSpace2(),
-                BuildTaskItemWidget(
-                  title: 'Date',
+                BuildTextInputItemWidget(
+                  title: 'datetime'.tr,
                   controller: controller.dateController,
-                  hint: 'Enter task here',
+                  hint: 'datetime_hint'.tr,
                   icon: IconButtonUtil(
                     icon: Icons.date_range,
                     color: Get.isDarkMode ? Colors.grey.shade300 : blackClr,
@@ -75,7 +73,7 @@ class CreateMemoryView extends GetView<CreateMemoryController> {
                   isSuffix: true,
                   validate: (String? value) {
                     if (value == null || value.isEmpty) {
-                      return 'Enter date';
+                      return 'datetime_verify'.tr;
                     }
                     return null;
                   },
@@ -87,7 +85,7 @@ class CreateMemoryView extends GetView<CreateMemoryController> {
         ),
       ),
       bottomNavigationBar: BuildColorPickerUtil(
-        buttonTitle: controller.isCreated == true ? 'Update' : 'Create',
+        buttonTitle: controller.isCreated == true ? 'update'.tr : 'create'.tr,
         child: GetBuilder<CreateMemoryController>(builder: (context) {
           return ListView.separated(
             scrollDirection: Axis.horizontal,
@@ -110,10 +108,11 @@ class CreateMemoryView extends GetView<CreateMemoryController> {
                 ? _controller
                     .updateMemory(
                       memory: Memory(
-                          title: controller.memory!.title,
-                          content: controller.memory!.content,
-                          dateTime: controller.memory!.dateTime,
-                          color: controller.memory!.color),
+                          id: controller.memory!.id,
+                          title: controller.titleController.text,
+                          content: controller.memoryController.text,
+                          dateTime: controller.dateController.text,
+                          color: controller.currentColor),
                     )
                     .then((value) => Get.back())
                 : _controller
