@@ -19,7 +19,6 @@ I applied all logic you can occurred on any note app such as create or delete or
 - This project is built using MVC architecture pattern with Getx for state management.
 - Sqflite to create local database.
 - GetStorage for caching data.
-- Functional programming concept using dartz plugin for handling server errors and exceptions.
 - Image picker package to pick images from gallery.
 
 -----------------------------------------------------------------------------
