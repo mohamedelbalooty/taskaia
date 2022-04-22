@@ -33,4 +33,4 @@ I applied all logic you can occurred on any note app such as create or delete or
 
 [<img src="https://user-images.githubusercontent.com/50374022/152713461-d367ec7a-687b-40ca-a881-30e49d69821c.png"
 alt='Get it on Google Play'
-height="80">](https://play.google.com/store/apps/details?id=com.mohamedElbalooty.qurani_karim)
+height="80">](https://play.google.com/store/apps/details?id=com.mohamedElbalooty.taskaia)
