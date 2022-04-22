@@ -1,6 +1,6 @@
 # Taskaia
 
-Taskaia is the note application that show user created notes, tasks and memories.
+### Taskaia is the note application that show user created notes, tasks and memories.
 I applied all logic you can occurred on any note app such as create or delete or update any of user tasks.
 
 -----------------------------------------------------------------------------
@@ -28,3 +28,9 @@ I applied all logic you can occurred on any note app such as create or delete or
 - Native Splash screen.
 - Support Arabic and English languages using Getx.
 - Dark mode and Light mode.
+
+-----------------------------------------------------------------------------
+
+[<img src="https://user-images.githubusercontent.com/50374022/152713461-d367ec7a-687b-40ca-a881-30e49d69821c.png"
+alt='Get it on Google Play'
+height="80">](https://play.google.com/store/apps/details?id=com.mohamedElbalooty.qurani_karim)
