@@ -1,11 +1,13 @@
-# Taskaia
+# 🔥 Taskaia
 
-### Taskaia is the note application that show user created notes, tasks and memories.
-I applied all logic you can occurred on any note app such as create or delete or update any of user tasks.
+#### Taskaia is the note application that show user created notes, tasks and memories.
+#### I applied all logic you can occurred on any note app such as create or delete or update any of user tasks.
+
+#### Please star ⭐ the repo if you like what you see😉.
 
 -----------------------------------------------------------------------------
 
-## App Design :
+## 📸 App Design :
 
 ![1](https://user-images.githubusercontent.com/61595547/163495822-eb593ec0-8751-4c30-9d96-3532bf2679ad.png)
 ![2](https://user-images.githubusercontent.com/61595547/163495815-ddc16ffc-c8e2-4fb0-beab-4f5aca7d812c.png)
@@ -14,7 +16,7 @@ I applied all logic you can occurred on any note app such as create or delete or
 
 -----------------------------------------------------------------------------
 
-### Plugins and Concepts :
+### ✨ Plugins and Concepts :
 
 - This project is built using MVC architecture pattern with Getx for state management.
 - Sqflite to create local database.
@@ -23,7 +25,7 @@ I applied all logic you can occurred on any note app such as create or delete or
 
 -----------------------------------------------------------------------------
 
-### App Features :
+### ✨ App Features :
 
 - Native Splash screen.
 - Support Arabic and English languages using Getx.
